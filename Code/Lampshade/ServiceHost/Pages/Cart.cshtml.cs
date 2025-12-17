@@ -27,7 +27,20 @@ namespace ServiceHost.Pages
         {
             var serializer = new JavaScriptSerializer();
             var value = Request.Cookies[CookieName];
+            
+            if (string.IsNullOrEmpty(value))
+            {
+                CartItems = new List<CartItem>();
+                return;
+            }
+            
             var cartItems = serializer.Deserialize<List<CartItem>>(value);
+            if (cartItems == null || !cartItems.Any())
+            {
+                CartItems = new List<CartItem>();
+                return;
+            }
+            
             foreach (var item in cartItems)
                 item.CalculateTotalItemPrice();
 
@@ -39,9 +52,18 @@ namespace ServiceHost.Pages
             var serializer = new JavaScriptSerializer();
             var value = Request.Cookies[CookieName];
             Response.Cookies.Delete(CookieName);
+            
+            if (string.IsNullOrEmpty(value))
+                return RedirectToPage("/Cart");
+                
             var cartItems = serializer.Deserialize<List<CartItem>>(value);
+            if (cartItems == null)
+                return RedirectToPage("/Cart");
+                
             var itemToRemove = cartItems.FirstOrDefault(x => x.Id == id);
-            cartItems.Remove(itemToRemove);
+            if (itemToRemove != null)
+                cartItems.Remove(itemToRemove);
+                
             var options = new CookieOptions {Expires = DateTime.Now.AddDays(2)};
             Response.Cookies.Append(CookieName, serializer.Serialize(cartItems), options);
             return RedirectToPage("/Cart");
@@ -51,17 +73,20 @@ namespace ServiceHost.Pages
         {
             var serializer = new JavaScriptSerializer();
             var value = Request.Cookies[CookieName];
+            
+            if (string.IsNullOrEmpty(value))
+                return RedirectToPage("/Cart");
+                
             var cartItems = serializer.Deserialize<List<CartItem>>(value);
+            if (cartItems == null || !cartItems.Any())
+                return RedirectToPage("/Cart");
+                
             foreach (var item in cartItems)
             {
                 item.TotalItemPrice = item.UnitPrice * item.Count;
             }
 
             CartItems = _productQuery.CheckInventoryStatus(cartItems);
-
-            //if (CartItems.Any(x => !x.IsInStock))
-            //    return RedirectToPage("/Cart");
-            //return RedirectToPage("/Checkout");
 
             return RedirectToPage(CartItems.Any(x => !x.IsInStock) ? "/Cart" : "/Checkout");
         }

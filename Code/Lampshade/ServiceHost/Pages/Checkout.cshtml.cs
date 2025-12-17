@@ -8,6 +8,7 @@ using _01_LampshadeQuery.Contracts.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using Nancy.Json;
 using ShopManagement.Application.Contracts.Order;
 
@@ -24,10 +25,11 @@ namespace ServiceHost.Pages
         private readonly IZarinPalFactory _zarinPalFactory;
         private readonly IOrderApplication _orderApplication;
         private readonly ICartCalculatorService _cartCalculatorService;
+        private readonly IConfiguration _configuration;
 
         public CheckoutModel(ICartCalculatorService cartCalculatorService, ICartService cartService,
             IProductQuery productQuery, IOrderApplication orderApplication, IZarinPalFactory zarinPalFactory,
-            IAuthHelper authHelper)
+            IAuthHelper authHelper, IConfiguration configuration)
         {
             Cart = new Cart();
             _cartCalculatorService = cartCalculatorService;
@@ -36,6 +38,7 @@ namespace ServiceHost.Pages
             _orderApplication = orderApplication;
             _zarinPalFactory = zarinPalFactory;
             _authHelper = authHelper;
+            _configuration = configuration;
         }
 
         public void OnGet()
@@ -53,6 +56,25 @@ namespace ServiceHost.Pages
         public IActionResult OnPostPay(int paymentMethod)
         {
             var cart = _cartService.Get();
+            
+            // اگر سبد خرید خالی بود، دوباره از کوکی بخون
+            if (cart == null || cart.Items == null || !cart.Items.Any())
+            {
+                var serializer = new JavaScriptSerializer();
+                var value = Request.Cookies[CookieName];
+                if (string.IsNullOrEmpty(value))
+                    return RedirectToPage("/Cart");
+                    
+                var cartItems = serializer.Deserialize<List<CartItem>>(value);
+                if (cartItems == null || !cartItems.Any())
+                    return RedirectToPage("/Cart");
+                    
+                foreach (var item in cartItems)
+                    item.CalculateTotalItemPrice();
+
+                cart = _cartCalculatorService.ComputeCart(cartItems);
+            }
+            
             cart.SetPaymentMethod(paymentMethod);
 
             var result = _productQuery.CheckInventoryStatus(cart.Items);
@@ -66,8 +88,12 @@ namespace ServiceHost.Pages
                     cart.PayAmount.ToString(CultureInfo.InvariantCulture), "", "",
                     "خرید از درگاه لوازم خانگی و دکوری", orderId);
 
-                return Redirect(
-                    $"https://{_zarinPalFactory.Prefix}.zarinpal.com/pg/StartPay/{paymentResponse.Authority}");
+                var isSandbox = _configuration.GetSection("payment")["method"] == "sandbox";
+                var paymentUrl = isSandbox
+                    ? $"https://sandbox.zarinpal.com/pg/StartPay/{paymentResponse.Authority}"
+                    : $"https://www.zarinpal.com/pg/StartPay/{paymentResponse.Authority}";
+
+                return Redirect(paymentUrl);
             }
 
             var paymentResult = new PaymentResult();

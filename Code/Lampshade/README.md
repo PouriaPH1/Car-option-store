@@ -34,7 +34,8 @@ dotnet ef database update --project CommnetManagement.Infrastructure.EFCore --st
 
 ### 3. اجرای پروژه
 ```bash
-cd ServiceHost
+cd Code\Lampshade\ServiceHost
+
 dotnet run
 ```
 

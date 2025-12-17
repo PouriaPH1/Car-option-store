@@ -17,11 +17,15 @@ namespace _0_Framework.Application.Sms
 
         public void Send(string number, string message)
         {
-            var token = GetToken();
-            var lines = new SmsLine().GetSmsLines(token);
-            if (lines == null) return;
+            try
+            {
+                var token = GetToken();
+                if (string.IsNullOrEmpty(token)) return;
+                
+                var lines = new SmsLine().GetSmsLines(token);
+                if (lines == null || lines.SMSLines == null || !lines.SMSLines.Any()) return;
 
-            var line = lines.SMSLines.Last().LineNumber.ToString();
+                var line = lines.SMSLines.Last().LineNumber.ToString();
             var data = new MessageSendObject
             {
                 Messages = new List<string>
@@ -34,11 +38,16 @@ namespace _0_Framework.Application.Sms
             var messageSendResponseObject = 
                 new MessageSend().Send(token, data);
 
-            if (messageSendResponseObject.IsSuccessful) return;
+                if (messageSendResponseObject.IsSuccessful) return;
 
-            line = lines.SMSLines.First().LineNumber.ToString();
-            data.LineNumber = line;
-            new MessageSend().Send(token, data);
+                line = lines.SMSLines.First().LineNumber.ToString();
+                data.LineNumber = line;
+                new MessageSend().Send(token, data);
+            }
+            catch (Exception)
+            {
+                // SMS service not configured, skip silently
+            }
         }
 
         private string GetToken()

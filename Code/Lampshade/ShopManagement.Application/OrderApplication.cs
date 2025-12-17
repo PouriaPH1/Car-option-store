@@ -60,18 +60,30 @@ namespace ShopManagement.Application
         public string PaymentSucceeded(long orderId, long refId)
         {
             var order = _orderRepository.Get(orderId);
+            if (order == null) return "";
+            
             order.PaymentSucceeded(refId);
             var symbol = _configuration.GetValue<string>("Symbol");
             var issueTrackingNo = CodeGenerator.Generate(symbol);
             order.SetIssueTrackingNo(issueTrackingNo);
-            if (!_shopInventoryAcl.ReduceFromInventory(order.Items)) return "";
-
+            
+            // Try to reduce inventory, but don't fail the order if it fails
+            var inventoryReduced = _shopInventoryAcl.ReduceFromInventory(order.Items);
+            
+            // Always save the order after successful payment
             _orderRepository.SaveChanges();
 
-            var (name, mobile) = _shopAccountAcl.GetAccountBy(order.AccountId);
-
-            _smsService.Send(mobile,
-                $"{name} گرامی سفارش شما با شماره پیگیری {issueTrackingNo} با موفقیت پرداخت شد و ارسال خواهد شد.");
+            try
+            {
+                var (name, mobile) = _shopAccountAcl.GetAccountBy(order.AccountId);
+                _smsService.Send(mobile,
+                    $"{name} گرامی سفارش شما با شماره پیگیری {issueTrackingNo} با موفقیت پرداخت شد و ارسال خواهد شد.");
+            }
+            catch
+            {
+                // SMS failed, but order is already saved
+            }
+            
             return issueTrackingNo;
         }
 
