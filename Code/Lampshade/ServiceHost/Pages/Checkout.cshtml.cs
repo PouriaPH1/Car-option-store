@@ -50,7 +50,19 @@ namespace ServiceHost.Pages
         public void OnGet()
         {
             var value = Request.Cookies[CookieName];
+            if (string.IsNullOrEmpty(value))
+            {
+                Cart = new Cart();
+                return;
+            }
+            
             var cartItems = JsonSerializer.Deserialize<List<CartItem>>(value, JsonOptions);
+            if (cartItems == null || !cartItems.Any())
+            {
+                Cart = new Cart();
+                return;
+            }
+            
             foreach (var item in cartItems)
                 item.CalculateTotalItemPrice();
 
