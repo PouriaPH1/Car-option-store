@@ -1,60 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using SmsIrRestful;
 
 namespace _0_Framework.Application.Sms
 {
     public class SmsService : ISmsService
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public SmsService(IConfiguration configuration)
+        public SmsService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
         public void Send(string number, string message)
         {
             try
             {
-                var token = GetToken();
-                if (string.IsNullOrEmpty(token)) return;
-                
-                var lines = new SmsLine().GetSmsLines(token);
-                if (lines == null || lines.SMSLines == null || !lines.SMSLines.Any()) return;
-
-                var line = lines.SMSLines.Last().LineNumber.ToString();
-            var data = new MessageSendObject
-            {
-                Messages = new List<string>
-                    {message}.ToArray(),
-                MobileNumbers = new List<string> {number}.ToArray(),
-                LineNumber = line,
-                SendDateTime = DateTime.Now,
-                CanContinueInCaseOfError = true
-            };
-            var messageSendResponseObject = 
-                new MessageSend().Send(token, data);
-
-                if (messageSendResponseObject.IsSuccessful) return;
-
-                line = lines.SMSLines.First().LineNumber.ToString();
-                data.LineNumber = line;
-                new MessageSend().Send(token, data);
+                SendAsync(number, message).GetAwaiter().GetResult();
             }
             catch (Exception)
             {
-                // SMS service not configured, skip silently
+                // SMS service not configured or failed, skip silently
             }
         }
 
-        private string GetToken()
+        private async Task SendAsync(string number, string message)
         {
             var smsSecrets = _configuration.GetSection("SmsSecrets");
-            var tokenService = new Token();
-            return tokenService.GetToken(smsSecrets["ApiKey"], smsSecrets["SecretKey"]);
+            var apiKey = smsSecrets["ApiKey"];
+            
+            if (string.IsNullOrEmpty(apiKey))
+                return;
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://api.sms.ir/v1/");
+            client.DefaultRequestHeaders.Add("x-api-key", apiKey);
+
+            var payload = new
+            {
+                lineNumber = smsSecrets["LineNumber"] ?? "30007732900900",
+                messageText = message,
+                mobiles = new[] { number }
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            await client.PostAsync("send/bulk", content);
         }
     }
 }

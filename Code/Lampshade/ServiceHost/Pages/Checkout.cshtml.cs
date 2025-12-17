@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using _0_Framework.Application;
 using _0_Framework.Application.ZarinPal;
 using _01_LampshadeQuery.Contracts;
@@ -9,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
-using Nancy.Json;
 using ShopManagement.Application.Contracts.Order;
 
 namespace ServiceHost.Pages
@@ -26,6 +27,11 @@ namespace ServiceHost.Pages
         private readonly IOrderApplication _orderApplication;
         private readonly ICartCalculatorService _cartCalculatorService;
         private readonly IConfiguration _configuration;
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
 
         public CheckoutModel(ICartCalculatorService cartCalculatorService, ICartService cartService,
             IProductQuery productQuery, IOrderApplication orderApplication, IZarinPalFactory zarinPalFactory,
@@ -43,9 +49,8 @@ namespace ServiceHost.Pages
 
         public void OnGet()
         {
-            var serializer = new JavaScriptSerializer();
             var value = Request.Cookies[CookieName];
-            var cartItems = serializer.Deserialize<List<CartItem>>(value);
+            var cartItems = JsonSerializer.Deserialize<List<CartItem>>(value, JsonOptions);
             foreach (var item in cartItems)
                 item.CalculateTotalItemPrice();
 
@@ -60,12 +65,11 @@ namespace ServiceHost.Pages
             // اگر سبد خرید خالی بود، دوباره از کوکی بخون
             if (cart == null || cart.Items == null || !cart.Items.Any())
             {
-                var serializer = new JavaScriptSerializer();
                 var value = Request.Cookies[CookieName];
                 if (string.IsNullOrEmpty(value))
                     return RedirectToPage("/Cart");
                     
-                var cartItems = serializer.Deserialize<List<CartItem>>(value);
+                var cartItems = JsonSerializer.Deserialize<List<CartItem>>(value, JsonOptions);
                 if (cartItems == null || !cartItems.Any())
                     return RedirectToPage("/Cart");
                     
