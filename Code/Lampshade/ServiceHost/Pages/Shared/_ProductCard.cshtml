@@ -1,0 +1,129 @@
+@model _01_LampshadeQuery.Contracts.Product.ProductQueryModel
+
+@* 
+    Product Card Partial View
+    Requirements: 4.1, 4.2, 4.3, 4.4
+    - تصویر با aspect-ratio 4:3
+    - برچسب تخفیف یا جدید
+    - دکمه‌های علاقه‌مندی و مقایسه (hover)
+    - نام محصول با hover effect
+    - قیمت با نمایش تخفیف
+    - امتیاز ستاره‌ای
+    - دکمه افزودن به سبد
+*@
+
+<div class="group bg-surface-dark rounded-xl border border-border-dark overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 flex flex-col">
+    <!-- Product Image with aspect-ratio 4:3 -->
+    <div class="relative aspect-[4/3] overflow-hidden bg-white/5 p-4">
+        <a asp-page="/Product" asp-route-id="@Model.Slug">
+            <img src="~/ProductPictures/@Model.Picture" 
+                 alt="@Model.PictureAlt" 
+                 title="@Model.PictureTitle"
+                 class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500" />
+        </a>
+        
+        <!-- Hover Actions: Wishlist & Compare Buttons -->
+        <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-2 group-hover:translate-x-0">
+            <button type="button" 
+                    class="size-8 bg-surface-dark/80 backdrop-blur text-white rounded-full flex items-center justify-center hover:bg-primary transition-colors shadow-sm"
+                    title="افزودن به علاقه‌مندی‌ها">
+                <span class="material-symbols-outlined text-[18px]">favorite</span>
+            </button>
+            <button type="button" 
+                    class="size-8 bg-surface-dark/80 backdrop-blur text-white rounded-full flex items-center justify-center hover:bg-primary transition-colors shadow-sm"
+                    title="مقایسه محصول">
+                <span class="material-symbols-outlined text-[18px]">compare_arrows</span>
+            </button>
+        </div>
+        
+        <!-- Discount or New Badge -->
+        @if (Model.HasDiscount)
+        {
+            <span class="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                @Model.DiscountRate٪ تخفیف
+            </span>
+        }
+        else
+        {
+            <span class="absolute top-3 left-3 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
+                جدید
+            </span>
+        }
+        
+        <!-- Out of Stock Overlay -->
+        @if (!Model.IsInStock)
+        {
+            <div class="absolute inset-0 bg-black/60 flex items-center justify-center rounded-lg">
+                <span class="text-white font-bold text-sm bg-red-600/90 px-3 py-1.5 rounded">ناموجود</span>
+            </div>
+        }
+    </div>
+    
+    <!-- Product Content -->
+    <div class="p-4 flex flex-col flex-1">
+        <!-- Category & Star Rating -->
+        <div class="flex items-start justify-between gap-2 mb-2">
+            <a asp-page="/ProductCategory" asp-route-id="@Model.CategorySlug" 
+               class="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded hover:bg-primary/20 transition-colors">
+                @Model.Category
+            </a>
+            <!-- Star Rating (Static 4 stars for now - can be made dynamic) -->
+            <div class="flex text-yellow-500">
+                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined text-[14px] text-gray-600">star</span>
+            </div>
+        </div>
+        
+        <!-- Product Name with hover effect -->
+        <h3 class="text-white font-bold text-lg leading-tight mb-4 group-hover:text-primary transition-colors line-clamp-2">
+            <a asp-page="/Product" asp-route-id="@Model.Slug" class="hover:text-primary">
+                @Model.Name
+            </a>
+        </h3>
+        
+        <!-- Price & Add to Cart Button -->
+        <div class="mt-auto pt-4 border-t border-border-dark/50 flex items-center justify-between">
+            <!-- Price Display with Discount -->
+            <div class="flex flex-col items-start">
+                @if (Model.HasDiscount)
+                {
+                    <span class="text-xs text-text-secondary line-through">@Model.Price</span>
+                    <span class="text-lg font-bold text-white">
+                        @Model.PriceWithDiscount 
+                        <span class="text-xs font-normal text-text-secondary">تومان</span>
+                    </span>
+                }
+                else
+                {
+                    <span class="text-lg font-bold text-white">
+                        @Model.Price 
+                        <span class="text-xs font-normal text-text-secondary">تومان</span>
+                    </span>
+                }
+            </div>
+            
+            <!-- Add to Cart Button -->
+            @if (Model.IsInStock)
+            {
+                <button type="button" 
+                        onclick="addToCart('@Model.Id', '@Model.Name', '@(Model.HasDiscount ? Model.PriceWithDiscount : Model.Price)', '@Model.Picture')"
+                        class="size-10 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-blue-600 transition-colors shadow-lg shadow-primary/20"
+                        title="افزودن به سبد خرید">
+                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                </button>
+            }
+            else
+            {
+                <button type="button" 
+                        class="size-10 rounded-lg bg-[#223649] text-text-secondary flex items-center justify-center cursor-not-allowed"
+                        disabled
+                        title="محصول ناموجود است">
+                    <span class="material-symbols-outlined">remove_shopping_cart</span>
+                </button>
+            }
+        </div>
+    </div>
+</div>

@@ -1,72 +1,65 @@
 ﻿@model List<_01_LampshadeQuery.Contracts.Article.ArticleQueryModel>
 
-<div class="blog-post-slider-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="blog-post-slider-border-wrapper section-space--inner">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="section-title-wrapper text-center section-space--half">
-                                <h2 class="section-title">آخرین مقالات سایت</h2>
-                                <p class="section-subtitle">
-                                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="blog-post-slider-wrapper">
-                                <div class="ht-slick-slider" data-slick-setting='{
-                                    "slidesToShow": 3,
-                                    "slidesToScroll": 1,
-                                    "arrows": false,
-                                    "autoplay": true,
-                                    "autoplaySpeed": 1000,
-                                    "speed": 1000,
-                                    "infinite": true,
-                                    "rtl": true
-                                }' data-slick-responsive='[
-                                    {"breakpoint":1501, "settings": {"slidesToShow": 3} },
-                                    {"breakpoint":1199, "settings": {"slidesToShow": 3} },
-                                    {"breakpoint":991, "settings": {"slidesToShow": 2} },
-                                    {"breakpoint":767, "settings": {"slidesToShow": 1} },
-                                    {"breakpoint":575, "settings": {"slidesToShow": 1} },
-                                    {"breakpoint":479, "settings": {"slidesToShow": 1} }
-                                ]'>
-                                    @foreach (var article in Model)
-                                    {
-                                        <div class="col">
-                                            <div class="single-slider-post">
-                                                <div class="single-slider-post__image">
-                                                    <a asp-page="/Article" asp-route-id="@article.Slug">
-                                                        <img src="~/ProductPictures/@article.Picture"
-                                                             class="img-fluid" alt="@article.PictureAlt" title="@article.PictureTitle">
-                                                    </a>
-                                                    <div class="single-slider-post__date-sticker">
-                                                        <span class="month">@article.PublishDate</span>
-                                                    </div>
-                                                </div>
-                                                <div class="single-slider-post__content">
-                                                    <h3 class="title">
-                                                        <a asp-page="/Article" asp-route-id="@article.Slug">
-                                                            @article.Title
-                                                        </a>
-                                                    </h3>
-                                                    @*<p class="post-meta">by <a href="#">HasTech</a></p>*@
-                                                    <p class="short-desc">@article.ShortDescription</p>
-                                                    <a asp-page="/Article" asp-route-id="@article.Slug" class="blog-post-link">
-                                                        ادامه مطلب
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
+<!-- Latest Articles Section -->
+<section class="py-12 lg:py-16">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-10">
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">آخرین مقالات</h2>
+            <p class="text-text-secondary max-w-2xl mx-auto">
+                جدیدترین مطالب و راهنماهای خرید آپشن خودرو
+            </p>
+        </div>
+        
+        <!-- Articles Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var article in Model.Take(3))
+            {
+                <article class="group bg-surface-dark rounded-xl border border-border-dark overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
+                    <!-- Article Image -->
+                    <div class="relative aspect-[16/10] overflow-hidden">
+                        <a asp-page="/Article" asp-route-id="@article.Slug">
+                            <img src="~/ProductPictures/@article.Picture" 
+                                 alt="@article.PictureAlt" 
+                                 title="@article.PictureTitle"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        </a>
+                        
+                        <!-- Date Badge -->
+                        <div class="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded">
+                            @article.PublishDate
                         </div>
                     </div>
-                </div>
-            </div>
+                    
+                    <!-- Article Content -->
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                            <a asp-page="/Article" asp-route-id="@article.Slug">@article.Title</a>
+                        </h3>
+                        
+                        <p class="text-text-secondary text-sm mb-4 line-clamp-2">
+                            @article.ShortDescription
+                        </p>
+                        
+                        <a asp-page="/Article" asp-route-id="@article.Slug" 
+                           class="inline-flex items-center gap-1 text-primary text-sm font-medium hover:gap-2 transition-all">
+                            ادامه مطلب
+                            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                        </a>
+                    </div>
+                </article>
+            }
         </div>
+        
+        <!-- View All Articles -->
+        @if (Model.Count > 3)
+        {
+            <div class="text-center mt-10">
+                <a asp-page="/ArticleCategory" class="inline-flex items-center gap-2 bg-surface-dark hover:bg-[#223649] text-white font-bold px-8 py-3 rounded-lg border border-border-dark transition-colors">
+                    مشاهده همه مقالات
+                    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                </a>
+            </div>
+        }
     </div>
-</div>
+</section>

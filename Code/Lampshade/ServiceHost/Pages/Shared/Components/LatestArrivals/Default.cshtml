@@ -1,89 +1,33 @@
 ﻿@model List<_01_LampshadeQuery.Contracts.Product.ProductQueryModel>
 
-
-<div class="single-row-slider-area section-space">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="section-title-wrapper text-center section-space--half">
-                    <h2 class="section-title">آخرین محصولات</h2>
-                    <p class="section-subtitle">
-                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
-                    </p>
-                </div>
-            </div>
+<!-- Latest Products Section -->
+<section class="py-12 lg:py-16">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-10">
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">آخرین محصولات</h2>
+            <p class="text-text-secondary max-w-2xl mx-auto">
+                جدیدترین محصولات اضافه شده به فروشگاه را مشاهده کنید
+            </p>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="single-row-slider-wrapper">
-                    <div class="ht-slick-slider" data-slick-setting='{
-                    "slidesToShow": 4,
-                    "slidesToScroll": 1,
-                    "arrows": true,
-                    "autoplay": false,
-                    "autoplaySpeed": 5000,
-                    "speed": 1000,
-                    "infinite": true,
-                    "rtl": true,
-                    "prevArrow": {"buttonClass": "slick-prev", "iconClass": "ion-chevron-left" },
-                    "nextArrow": {"buttonClass": "slick-next", "iconClass": "ion-chevron-right" }
-                }' data-slick-responsive='[
-                    {"breakpoint":1501, "settings": {"slidesToShow": 4} },
-                    {"breakpoint":1199, "settings": {"slidesToShow": 4, "arrows": false} },
-                    {"breakpoint":991, "settings": {"slidesToShow": 3, "arrows": false} },
-                    {"breakpoint":767, "settings": {"slidesToShow": 2, "arrows": false} },
-                    {"breakpoint":575, "settings": {"slidesToShow": 2, "arrows": false} },
-                    {"breakpoint":479, "settings": {"slidesToShow": 1, "arrows": false} }
-                ]'>
-                        @foreach (var product in Model)
-                        {
-                            <div class="col">
-                                <div class="single-grid-product">
-                                    <div class="single-grid-product__image">
-                                        <div class="single-grid-product__label">
-                                            @if (product.HasDiscount)
-                                            {
-                                                <span class="sale">-@product.DiscountRate%</span>
-                                                <span class="new">جدید</span>
-                                            }
-                                        </div>
-                                        <a asp-page="/Product" asp-route-id="@product.Slug">
-                                            <img src="~/ProductPictures/@product.Picture" class="img-fluid" alt="@product.PictureAlt" title="@product.PictureTitle">
-                                        </a>
-                                    </div>
-                                    <div class="single-grid-product__content">
-                                        <div class="single-grid-product__category-rating">
-                                            <span class="category"><a asp-page="/ProductCategory" asp-route-id="@product.CategorySlug">@product.Category</a></span>
-                                            <span class="rating">
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star-outline"></i>
-                                            </span>
-                                        </div>
-
-                                        <h3 class="single-grid-product__title">
-                                            <a asp-page="/Product" asp-route-id="@product.Slug">@product.Name</a>
-                                        </h3>
-                                        <p class="single-grid-product__price">
-                                            @if (product.HasDiscount)
-                                            {
-                                                <span class="discounted-price">@product.PriceWithDiscount تومان</span>
-                                                <span class="main-price discounted">@product.Price تومان</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="main-price">@product.Price تومان</span>
-                                            }
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
+        
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach (var product in Model.Take(8))
+            {
+                <partial name="_ProductCard" model="product" />
+            }
         </div>
+        
+        <!-- View All Button -->
+        @if (Model.Count > 8)
+        {
+            <div class="text-center mt-10">
+                <a href="/ProductCategory" class="inline-flex items-center gap-2 bg-surface-dark hover:bg-[#223649] text-white font-bold px-8 py-3 rounded-lg border border-border-dark transition-colors">
+                    مشاهده همه محصولات
+                    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                </a>
+            </div>
+        }
     </div>
-</div>
+</section>

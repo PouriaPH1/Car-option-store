@@ -1,285 +1,231 @@
 ﻿@model _01_LampshadeQuery.MenuModel
 @inject _0_Framework.Application.IAuthHelper AuthHelper
 
-<div class="header-area header-sticky">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="header-wrapper d-none d-lg-flex">
-                    <div class="logo">
-                        <a asp-page="/Index">
-                            <img src="~/Theme/assets/img/logo.png" class="img-fluid" alt="">
-                        </a>
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-[#101a23]/95 backdrop-blur-md border-b border-border-dark">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20 gap-8">
+            <!-- Logo Section (Right in RTL) -->
+            <div class="flex items-center gap-4 min-w-fit">
+                <a asp-page="/Index" class="flex items-center gap-4">
+                    <div class="size-10 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined !text-[28px]">directions_car</span>
                     </div>
-                    <div class="navigation-menu-wrapper">
-                        <nav>
-                            <ul>
-                                <li>
-                                    <a asp-page="/Index">صفحه اصلی</a>
-                                </li>
-                                <li class="menu-item-has-children">
-                                    <a>محصولات</a>
-                                    <ul class="sub-menu">
-                                        @foreach (var category in Model.ProductCategories)
-                                        {
-                                            <li>
-                                                <a asp-page="./ProductCategory" asp-route-id="@category.Slug">@category.Name</a>
-                                            </li>
-                                        }
-                                    </ul>
-                                </li>
-                                <li class="menu-item-has-children">
-                                    <a>مقالات</a>
-                                    <ul class="sub-menu">
-                                        @foreach (var category in Model.ArticleCategories)
-                                        {
-                                            <li>
-                                                <a asp-page="./ArticleCategory" asp-route-id="@category.Slug">@category.Name</a>
-                                            </li>
-                                        }
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="contact.html">تماس با ما</a>
-                                </li>
-                                @if (AuthHelper.IsAuthenticated())
-                                {
-                                    <li>
-                                        <a asp-page="/Account" asp-page-handler="Logout">خروج</a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li>
-                                        <a asp-page="/Account">وورد / ثبت نام</a>
-                                    </li>
-                                }
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="header-icon-wrapper">
-                        <ul class="icon-list">
-                            <li>
-                                <a href="javascript:void(0)" id="search-overlay-trigger">
-                                    <i class="ion-ios-search-strong"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <div class="header-cart-icon">
-                                    <a href="#" id="minicart-trigger">
-                                        <i class="ion-bag"></i>
-                                        <span class="counter" id="cart_items_count">0</span>
-                                    </a>
-                                    <div class="mini-cart" id="mini-cart">
-                                        <div class="cart-items-wrapper ps-scroll" id="cart_items_wrapper">
-                                            
-                                        </div>
-                                        <div class="cart-buttons">
-                                            <a asp-page="/Cart">مشاهده سبد خرید</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="header-settings-icon">
-                                    <a href="javascript:void(0)" class="header-settings-trigger"
-                                       id="header-settings-trigger">
-                                        <div class="setting-button">
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                    </a>
-
-                                    <div class="settings-menu-wrapper" id="settings-menu-wrapper">
-                                        <div class="single-settings-block">
-                                            <h4 class="title">پروفایل من </h4>
-                                            <ul>
-                                                <li>
-                                                    <a asp-page="/Account">ثبت نام</a>
-                                                </li>
-                                                <li>
-                                                    <a asp-page="/Account">ورود</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        @*<div class="single-settings-block">
-                                                <h4 class="title">CURRENCY: USD </h4>
-                                                <ul>
-                                                    <li>
-                                                        <a href="javascript:void(0)">€ Euro</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">$ US Dollar</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="single-settings-block">
-                                                <h4 class="title">LANGUAGE: EN-GB </h4>
-                                                <ul>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <img src="~/Theme/assets/img/icons/en-gb.png" alt=""> English
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:void(0)">
-                                                            <img src="~/Theme/assets/img/icons/de-de.png" alt=""> Germany
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>*@
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="header-mobile-navigation d-block d-lg-none">
-                    <div class="row align-items-center">
-                        <div class="col-6 col-md-6">
-                            <div class="header-logo">
-                                <a href="index.html">
-                                    <img src="~/Theme/assets/img/logo.png" class="img-fluid" alt="">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-6">
-                            <div class="mobile-navigation text-right">
-                                <div class="header-icon-wrapper">
-                                    <ul class="icon-list justify-content-end">
-                                        <li>
-                                            <div class="header-cart-icon">
-                                                <a href="cart.html">
-                                                    <i class="ion-bag"></i>
-                                                    <span class="counter">3</span>
-                                                </a>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0)" class="mobile-menu-icon"
-                                               id="mobile-menu-trigger">
-                                                <i class="fa fa-bars"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <h1 class="text-white text-xl font-bold tracking-tight hidden md:block">فروشگاه آپشن</h1>
+                </a>
             </div>
-        </div>
-    </div>
-</div>
 
-
-<div class="offcanvas-mobile-menu" id="offcanvas-mobile-menu">
-    <a href="javascript:void(0)" class="offcanvas-menu-close" id="offcanvas-menu-close-trigger">
-        <i class="ion-android-close"></i>
-    </a>
-
-    <div class="offcanvas-wrapper">
-
-        <div class="offcanvas-inner-content">
-            <div class="offcanvas-mobile-search-area">
-                <form action="#">
-                    <input type="search" placeholder="جستجو ...">
-                    <button type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
+            <!-- Search Bar (Center) -->
+            <div class="flex-1 max-w-2xl hidden md:block">
+                <form asp-page="/Search" method="get">
+                    <label class="relative flex items-center w-full group">
+                        <div class="absolute right-4 text-text-secondary group-focus-within:text-primary transition-colors">
+                            <span class="material-symbols-outlined">search</span>
+                        </div>
+                        <input name="q" 
+                               class="w-full h-12 bg-surface-dark border-none rounded-xl pr-12 pl-4 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:bg-[#1c2e3e] transition-all text-sm font-medium" 
+                               placeholder="جستجو در میان محصولات..." 
+                               type="text" />
+                    </label>
                 </form>
             </div>
-            <nav class="offcanvas-navigation">
-                <ul>
-                    <li class="">
-                        <a asp-page="/Index">صفحه اصلی</a>
-                    </li>
-                    <li class="menu-item-has-children">
-                        <a href="#">محصولات</a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a href="blog-left-sidebar.html">دکوری</a>
-                            </li>
-                            <li>
-                                <a href="blog-right-sidebar.html">نگه دارنده</a>
-                            </li>
-                        </ul>
-                    </li>
 
-                    <li class="menu-item-has-children">
-                        <a href="#">مقالات</a>
-                        <ul class="sub-menu">
-                            <li>
-                                <a href="blog-left-sidebar.html">گروه مقاله1</a>
-                            </li>
-                            <li>
-                                <a href="blog-right-sidebar.html">گروه مقاله2</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a asp-page="/Contact">تماس با ما</a>
-                    </li>
-                </ul>
-            </nav>
+            <!-- Actions (Left in RTL) -->
+            <div class="flex items-center gap-4">
+                <!-- Cart Icon -->
+                <div class="relative">
+                    <a asp-page="/Cart" class="relative p-2.5 text-text-secondary hover:text-white hover:bg-surface-dark rounded-lg transition-colors flex items-center justify-center">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span id="cart_items_count" class="absolute -top-1 -left-1 size-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">0</span>
+                    </a>
+                </div>
 
-            <div class="offcanvas-settings">
-                <nav class="offcanvas-navigation">
-                    <ul>
-                        <li class="menu-item-has-children">
-                            <a href="#">پروفایل من </a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="login-register.html">ثبت نام</a>
-                                </li>
-                                <li>
-                                    <a href="login-register.html">ورود</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="offcanvas-widget-area">
-                <div class="off-canvas-contact-widget">
-                    <div class="header-contact-info">
-                        <ul class="header-contact-info__list">
-                            <li>
-                                <i class="ion-android-phone-portrait"></i>
-                                <a href="tel://12452456012">
-                                    (1245) 2456
-                                    012
-                                </a>
-                            </li>
-                            <li>
-                                <i class="ion-android-mail"></i> <a href="mailto:info@yourdomain.com">info@atriya.com</a>
-                            </li>
-                        </ul>
+                <!-- User Menu (Desktop) -->
+                @if (AuthHelper.IsAuthenticated())
+                {
+                    <div class="hidden lg:flex items-center gap-2">
+                        <a asp-page="/Account" class="p-2.5 text-text-secondary hover:text-white hover:bg-surface-dark rounded-lg transition-colors">
+                            <span class="material-symbols-outlined">person</span>
+                        </a>
+                        <a asp-page="/Account" asp-page-handler="Logout" class="h-10 px-6 bg-surface-dark hover:bg-red-600/20 border border-border-dark hover:border-red-500/50 flex items-center justify-center rounded-lg text-text-secondary hover:text-red-400 text-sm font-medium transition-colors">
+                            خروج
+                        </a>
                     </div>
+                }
+                else
+                {
+                    <a asp-page="/Account" class="hidden lg:flex h-10 px-6 bg-primary hover:bg-blue-600 items-center justify-center rounded-lg text-white text-sm font-bold transition-colors">
+                        ورود / ثبت‌نام
+                    </a>
+                }
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-trigger" class="lg:hidden p-2.5 text-text-secondary hover:text-white hover:bg-surface-dark rounded-lg transition-colors">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search (Visible only on small screens) -->
+        <div class="pb-4 md:hidden">
+            <form asp-page="/Search" method="get">
+                <label class="relative flex items-center w-full">
+                    <div class="absolute right-3 text-text-secondary">
+                        <span class="material-symbols-outlined text-[20px]">search</span>
+                    </div>
+                    <input name="q" 
+                           class="w-full h-10 bg-surface-dark border-none rounded-lg pr-10 pl-3 text-white text-sm placeholder:text-text-secondary focus:ring-2 focus:ring-primary" 
+                           placeholder="جستجو..." />
+                </label>
+            </form>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation Links Bar -->
+<nav class="bg-surface-dark border-b border-border-dark hidden md:block">
+    <div class="max-w-[1440px] mx-auto px-8">
+        <div class="flex items-center gap-8 h-12 text-sm font-medium text-text-secondary overflow-x-auto">
+            <a asp-page="/Index" class="text-primary hover:text-white transition-colors whitespace-nowrap">صفحه اصلی</a>
+            @foreach (var category in Model.ProductCategories)
+            {
+                <a asp-page="/ProductCategory" asp-route-id="@category.Slug" class="hover:text-white transition-colors whitespace-nowrap">@category.Name</a>
+            }
+            @foreach (var category in Model.ArticleCategories)
+            {
+                <a asp-page="/ArticleCategory" asp-route-id="@category.Slug" class="hover:text-white transition-colors whitespace-nowrap">@category.Name</a>
+            }
+        </div>
+    </div>
+</nav>
+
+
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
+
+<!-- Mobile Menu (Offcanvas) -->
+<div id="mobile-menu" class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-background-dark border-l border-border-dark z-50 transform translate-x-full transition-transform duration-300 ease-out lg:hidden">
+    <div class="flex flex-col h-full">
+        <!-- Mobile Menu Header -->
+        <div class="flex items-center justify-between p-4 border-b border-border-dark">
+            <div class="flex items-center gap-3">
+                <div class="size-9 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined !text-[22px]">directions_car</span>
                 </div>
-                <!--Off Canvas Widget Social Start-->
-                <div class="off-canvas-widget-social">
-                    <a href="#" title="Facebook">
-                        <i class="fa fa-facebook"></i>
-                    </a>
-                    <a href="#" title="Twitter">
-                        <i class="fa fa-twitter"></i>
-                    </a>
-                    <a href="#" title="LinkedIn">
-                        <i class="fa fa-linkedin"></i>
-                    </a>
-                    <a href="#" title="Youtube">
-                        <i class="fa fa-youtube-play"></i>
-                    </a>
-                    <a href="#" title="Vimeo">
-                        <i class="fa fa-vimeo-square"></i>
-                    </a>
+                <span class="text-white font-bold">فروشگاه آپشن</span>
+            </div>
+            <button id="mobile-menu-close" class="p-2 text-text-secondary hover:text-white hover:bg-surface-dark rounded-lg transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Content -->
+        <div class="flex-1 overflow-y-auto p-4">
+            <!-- Mobile Navigation -->
+            <nav class="space-y-1">
+                <a asp-page="/Index" class="flex items-center gap-3 px-4 py-3 rounded-lg text-white bg-primary/10 hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">home</span>
+                    <span class="font-medium">صفحه اصلی</span>
+                </a>
+
+                <!-- Product Categories -->
+                <div class="pt-4 pb-2">
+                    <span class="px-4 text-xs font-bold text-text-secondary uppercase tracking-wider">دسته‌بندی محصولات</span>
                 </div>
-                <!--Off Canvas Widget Social End-->
+                @foreach (var category in Model.ProductCategories)
+                {
+                    <a asp-page="/ProductCategory" asp-route-id="@category.Slug" class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:text-white hover:bg-surface-dark transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">category</span>
+                        <span class="font-medium">@category.Name</span>
+                    </a>
+                }
+
+                <!-- Article Categories -->
+                @if (Model.ArticleCategories.Any())
+                {
+                    <div class="pt-4 pb-2">
+                        <span class="px-4 text-xs font-bold text-text-secondary uppercase tracking-wider">مقالات</span>
+                    </div>
+                    @foreach (var category in Model.ArticleCategories)
+                    {
+                        <a asp-page="/ArticleCategory" asp-route-id="@category.Slug" class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-secondary hover:text-white hover:bg-surface-dark transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">article</span>
+                            <span class="font-medium">@category.Name</span>
+                        </a>
+                    }
+                }
+            </nav>
+        </div>
+
+        <!-- Mobile Menu Footer -->
+        <div class="p-4 border-t border-border-dark space-y-3">
+            @if (AuthHelper.IsAuthenticated())
+            {
+                <a asp-page="/Account" class="flex items-center justify-center gap-2 w-full h-11 bg-surface-dark hover:bg-[#223649] border border-border-dark rounded-lg text-white font-medium transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">person</span>
+                    حساب کاربری
+                </a>
+                <a asp-page="/Account" asp-page-handler="Logout" class="flex items-center justify-center gap-2 w-full h-11 bg-red-600/10 hover:bg-red-600/20 border border-red-500/30 rounded-lg text-red-400 font-medium transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">logout</span>
+                    خروج
+                </a>
+            }
+            else
+            {
+                <a asp-page="/Account" class="flex items-center justify-center gap-2 w-full h-11 bg-primary hover:bg-blue-600 rounded-lg text-white font-bold transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">login</span>
+                    ورود / ثبت‌نام
+                </a>
+            }
+
+            <!-- Contact Info -->
+            <div class="pt-3 flex items-center justify-center gap-4 text-text-secondary text-sm">
+                <a href="tel:02112345678" class="flex items-center gap-1 hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined text-[16px]">phone</span>
+                    ۰۲۱-۱۲۳۴۵۶۷۸
+                </a>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Mobile Menu Toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuTrigger = document.getElementById('mobile-menu-trigger');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+
+        function openMobileMenu() {
+            mobileMenu.classList.remove('translate-x-full');
+            mobileMenuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('translate-x-full');
+            mobileMenuOverlay.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileMenuTrigger) {
+            mobileMenuTrigger.addEventListener('click', openMobileMenu);
+        }
+
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+        }
+
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMobileMenu();
+            }
+        });
+    });
+</script>

@@ -6,143 +6,257 @@
     ViewData["metaDescription"] = Model.ProductCategory.MetaDescription;
 }
 
-<div class="breadcrumb-area section-space--half">
-    <div class="container wide">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb-wrapper breadcrumb-bg">
-                    <div class="breadcrumb-content">
-                        <h1 class="breadcrumb-content__title">@Model.ProductCategory.Name</h1>
-                        <h2>@Model.ProductCategory.Description</h2>
-                        <ul class="breadcrumb-content__page-map">
-                            <li><a asp-page="./Index">صفحه اصلی</a></li>
-                            <li class="active">@Model.ProductCategory.Name</li>
-                        </ul>
+<!-- Main Content -->
+<div class="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumbs -->
+    <div class="flex items-center gap-2 mb-8 text-sm">
+        <a asp-page="./Index" class="text-text-secondary hover:text-primary transition-colors">خانه</a>
+        <span class="text-text-secondary material-symbols-outlined text-[16px]">chevron_left</span>
+        <span class="text-white font-medium">@Model.ProductCategory.Name</span>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Mobile Filter Toggle Button -->
+        <div class="lg:hidden mb-4">
+            <button type="button" onclick="toggleMobileFilters()" 
+                    class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-surface-dark border border-border-dark rounded-xl text-white font-medium hover:bg-[#223649] transition-colors">
+                <span class="material-symbols-outlined">filter_list</span>
+                فیلترها
+                <span class="material-symbols-outlined text-text-secondary">expand_more</span>
+            </button>
+        </div>
+
+        <!-- Sidebar (Filters) -->
+        <aside id="filtersSidebar" class="w-full lg:w-1/4 shrink-0 space-y-6 hidden lg:block">
+            <!-- Category Filter -->
+            <div class="bg-surface-dark rounded-xl border border-border-dark overflow-hidden">
+                <div class="p-4 border-b border-border-dark flex justify-between items-center">
+                    <h3 class="font-bold text-white">دسته‌بندی‌ها</h3>
+                    <span class="material-symbols-outlined text-text-secondary">category</span>
+                </div>
+                <div class="p-2">
+                    <ul class="space-y-1">
+                        <li>
+                            <a asp-page="/ProductCategory" asp-route-id="@Model.ProductCategory.Slug"
+                               class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-[#223649] text-primary font-medium">
+                                <span>@Model.ProductCategory.Name</span>
+                                <span class="text-xs bg-primary/20 px-2 py-0.5 rounded-full">@Model.ProductCategory.Products.Count</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Car Model Filter -->
+            <div class="bg-surface-dark rounded-xl border border-border-dark overflow-hidden p-4 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-white">خودرو</h3>
+                    <span class="material-symbols-outlined text-text-secondary">directions_car</span>
+                </div>
+                <div class="space-y-3">
+                    <label class="flex flex-col gap-2">
+                        <span class="text-sm text-text-secondary">برند خودرو</span>
+                        <select id="carBrand" class="w-full bg-[#101a23] border border-border-dark rounded-lg text-white h-10 px-3 focus:ring-1 focus:ring-primary focus:border-primary text-sm">
+                            <option value="">انتخاب کنید...</option>
+                            <option value="irankhodro">ایران خودرو</option>
+                            <option value="saipa">سایپا</option>
+                            <option value="hyundai">هیوندای</option>
+                            <option value="kia">کیا</option>
+                        </select>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-sm text-text-secondary">مدل خودرو</span>
+                        <select id="carModel" class="w-full bg-[#101a23] border border-border-dark rounded-lg text-white h-10 px-3 focus:ring-1 focus:ring-primary focus:border-primary text-sm" disabled>
+                            <option value="">ابتدا برند را انتخاب کنید</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Price Filter -->
+            <div class="bg-surface-dark rounded-xl border border-border-dark overflow-hidden p-4 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-white">بازه قیمت (تومان)</h3>
+                    <span class="material-symbols-outlined text-text-secondary">attach_money</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input id="priceMin" type="text" placeholder="از" 
+                           class="w-full bg-[#101a23] border border-border-dark rounded-lg text-white h-9 text-center text-sm focus:ring-primary focus:border-primary" />
+                    <span class="text-text-secondary">-</span>
+                    <input id="priceMax" type="text" placeholder="تا" 
+                           class="w-full bg-[#101a23] border border-border-dark rounded-lg text-white h-9 text-center text-sm focus:ring-primary focus:border-primary" />
+                </div>
+                <button type="button" onclick="applyPriceFilter()" 
+                        class="w-full h-9 bg-primary/10 text-primary hover:bg-primary hover:text-white rounded-lg text-sm font-medium transition-colors">
+                    اعمال فیلتر
+                </button>
+            </div>
+
+            <!-- Banner Ad -->
+            <div class="rounded-xl overflow-hidden relative h-64 group cursor-pointer hidden lg:block">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-surface-dark"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent flex flex-col justify-end p-6">
+                    <p class="text-primary font-bold mb-1">پیشنهاد ویژه</p>
+                    <h4 class="text-white text-lg font-bold">محصولات @Model.ProductCategory.Name</h4>
+                    <p class="text-gray-300 text-sm mt-2">بهترین کیفیت با قیمت مناسب</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Product Grid Area -->
+        <div class="flex-1 min-w-0">
+            <!-- Sort & Header -->
+            <div class="bg-surface-dark border border-border-dark rounded-xl p-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white">@Model.ProductCategory.Name</h2>
+                    <p class="text-text-secondary text-sm mt-1">نمایش @Model.ProductCategory.Products.Count محصول</p>
+                </div>
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <span class="text-sm text-text-secondary whitespace-nowrap hidden sm:block">مرتب‌سازی:</span>
+                    <select id="sortOrder" onchange="sortProducts(this.value)" 
+                            class="form-select bg-[#101a23] border-border-dark text-white text-sm rounded-lg focus:ring-primary focus:border-primary block w-full sm:w-48 p-2.5">
+                        <option value="bestseller">پرفروش‌ترین</option>
+                        <option value="newest">جدیدترین</option>
+                        <option value="cheapest">ارزان‌ترین</option>
+                        <option value="expensive">گران‌ترین</option>
+                    </select>
+                    <div class="flex bg-[#101a23] rounded-lg border border-border-dark p-1 shrink-0">
+                        <button type="button" onclick="setGridView()" id="gridViewBtn" 
+                                class="p-1.5 rounded bg-surface-dark text-white shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                        </button>
+                        <button type="button" onclick="setListView()" id="listViewBtn" 
+                                class="p-1.5 rounded text-text-secondary hover:text-white">
+                            <span class="material-symbols-outlined text-[20px]">view_list</span>
+                        </button>
                     </div>
                 </div>
             </div>
+
+            <!-- Products Grid -->
+            @if (Model.ProductCategory.Products.Any())
+            {
+                <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach (var product in Model.ProductCategory.Products)
+                    {
+                        <partial name="_ProductCard" model="product" />
+                    }
+                </div>
+            }
+            else
+            {
+                <!-- Empty State -->
+                <div class="bg-surface-dark border border-border-dark rounded-xl p-12 text-center">
+                    <span class="material-symbols-outlined text-[64px] text-text-secondary mb-4">inventory_2</span>
+                    <h3 class="text-xl font-bold text-white mb-2">محصولی یافت نشد</h3>
+                    <p class="text-text-secondary">در حال حاضر محصولی در این دسته‌بندی موجود نیست.</p>
+                    <a asp-page="./Index" class="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-primary hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
+                        <span class="material-symbols-outlined">home</span>
+                        بازگشت به صفحه اصلی
+                    </a>
+                </div>
+            }
+
+            <!-- Pagination -->
+            @if (Model.ProductCategory.Products.Count > 12)
+            {
+                <div class="mt-12 flex justify-center">
+                    <nav class="flex items-center gap-1">
+                        <button type="button" class="size-10 flex items-center justify-center rounded-lg border border-border-dark bg-surface-dark text-text-secondary hover:text-white hover:bg-[#223649] transition-colors">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                        <button type="button" class="size-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold shadow-lg shadow-primary/25">۱</button>
+                        <button type="button" class="size-10 flex items-center justify-center rounded-lg border border-border-dark bg-surface-dark text-text-secondary hover:text-white hover:bg-[#223649] transition-colors">۲</button>
+                        <button type="button" class="size-10 flex items-center justify-center rounded-lg border border-border-dark bg-surface-dark text-text-secondary hover:text-white hover:bg-[#223649] transition-colors">
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </button>
+                    </nav>
+                </div>
+            }
         </div>
     </div>
 </div>
 
-<div class="page-content-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="page-wrapper">
-                    <div class="page-content-wrapper">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="shop-header">
-                                    <div class="shop-header__left">
-                                        <div class="shop-header__left__message">
-                                            Showing 1 to 9 of 15 (2 Pages)
-                                        </div>
-                                    </div>
+@section Scripts {
+    <script>
+        // Toggle mobile filters
+        function toggleMobileFilters() {
+            const sidebar = document.getElementById('filtersSidebar');
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('block');
+        }
 
-                                    <div class="shop-header__right">
+        // Car brand/model filter logic
+        const carModels = {
+            'irankhodro': ['پژو 206', 'پژو 207', 'پژو پارس', 'سمند', 'دنا', 'دنا پلاس', 'رانا', 'تارا'],
+            'saipa': ['پراید', 'تیبا', 'کوییک', 'ساینا', 'شاهین'],
+            'hyundai': ['النترا', 'سوناتا', 'توسان', 'سانتافه', 'اکسنت'],
+            'kia': ['سراتو', 'اپتیما', 'اسپورتیج', 'سورنتو', 'ریو']
+        };
 
-                                        <div class="single-select-block d-inline-block">
-                                            <span class="select-title">Show:</span>
-                                            <select>
-                                                <option value="1">10</option>
-                                                <option value="2">20</option>
-                                                <option value="3">30</option>
-                                                <option value="4">40</option>
-                                            </select>
-                                        </div>
+        document.getElementById('carBrand').addEventListener('change', function() {
+            const modelSelect = document.getElementById('carModel');
+            const brand = this.value;
+            
+            modelSelect.innerHTML = '';
+            
+            if (brand && carModels[brand]) {
+                modelSelect.disabled = false;
+                modelSelect.innerHTML = '<option value="">انتخاب مدل...</option>';
+                carModels[brand].forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+            } else {
+                modelSelect.disabled = true;
+                modelSelect.innerHTML = '<option value="">ابتدا برند را انتخاب کنید</option>';
+            }
+        });
 
-                                        <div class="single-select-block d-inline-block">
-                                            <span class="select-title">Sort By:</span>
-                                            <select class="pr-0">
-                                                <option value="1">Default</option>
-                                                <option value="2">Name (A-Z)</option>
-                                                <option value="3">Price (min - max)</option>
-                                                <option value="4">Color</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        // Sort products (client-side for now)
+        function sortProducts(sortBy) {
+            // This would typically trigger a server request
+            // For now, it's a placeholder for future implementation
+            console.log('Sort by:', sortBy);
+        }
 
-                            <div class="col-lg-12">
-                                <div class="shop-page-content">
-                                    <div class="row shop-product-wrap grid three-column">
-                                        @foreach (var product in Model.ProductCategory.Products)
-                                        {
-                                            <div class="col-12 col-lg-4 col-md-4 col-sm-6">
-                                                <div class="single-grid-product grid-view-product">
-                                                    <div class="single-grid-product__image">
-                                                        @if (product.HasDiscount)
-                                                        {
-                                                            <div class="single-grid-product__label">
-                                                                <span class="sale">-@product.DiscountRate%</span>
-                                                            </div>
-                                                        }
-                                                        <a asp-page="/Product" asp-route-id="@product.Slug">
-                                                            <img src="~/ProductPictures/@product.Picture" class="img-fluid"
-                                                                 alt="@product.PictureAlt" title="@product.PictureTitle">
-                                                        </a>
-                                                    </div>
-                                                    <div class="single-grid-product__content">
-                                                        <div class="single-grid-product__category-rating">
-                                                            <span class="category">
-                                                                <a asp-page="/ProductCategory" asp-route-id="@Model.ProductCategory.Slug">@Model.ProductCategory.Name</a>
-                                                            </span>
-                                                            <span class="rating">
-                                                                <i class="ion-android-star active"></i>
-                                                                <i class="ion-android-star active"></i>
-                                                                <i class="ion-android-star active"></i>
-                                                                <i class="ion-android-star active"></i>
-                                                                <i class="ion-android-star-outline"></i>
-                                                            </span>
-                                                        </div>
+        // Price filter
+        function applyPriceFilter() {
+            const min = document.getElementById('priceMin').value;
+            const max = document.getElementById('priceMax').value;
+            // This would typically trigger a server request
+            console.log('Price filter:', min, '-', max);
+        }
 
-                                                        <h2 class="single-grid-product__title">
-                                                            <a asp-page="/Product" asp-route-id="@product.Slug">@product.Name</a>
-                                                        </h2>
-                                                        <p class="single-grid-product__price">
-                                                            @if (product.HasDiscount)
-                                                            {
-                                                                <span class="discounted-price">@product.PriceWithDiscount تومان</span>
-                                                                <span class="main-price discounted">@product.Price تومان</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="main-price">@product.Price تومان</span>
-                                                            }
-                                                        </p>
-                                                        @if (product.HasDiscount)
-                                                        {
-                                                            <div class="product-countdown" data-countdown="@product.DiscountExpireDate"></div>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
+        // Grid/List view toggle
+        function setGridView() {
+            const grid = document.getElementById('productsGrid');
+            const gridBtn = document.getElementById('gridViewBtn');
+            const listBtn = document.getElementById('listViewBtn');
+            
+            grid.classList.remove('grid-cols-1');
+            grid.classList.add('sm:grid-cols-2', 'lg:grid-cols-3');
+            
+            gridBtn.classList.add('bg-surface-dark', 'text-white', 'shadow-sm');
+            gridBtn.classList.remove('text-text-secondary');
+            listBtn.classList.remove('bg-surface-dark', 'text-white', 'shadow-sm');
+            listBtn.classList.add('text-text-secondary');
+        }
 
-                                <div class="pagination-area">
-                                    <div class="pagination-area__left">
-                                        Showing 1 to 9 of 11 (2 Pages)
-                                    </div>
-                                    <div class="pagination-area__right">
-                                        <ul class="pagination-section">
-                                            <li>
-                                                <a class="active" href="#">1</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">2</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        function setListView() {
+            const grid = document.getElementById('productsGrid');
+            const gridBtn = document.getElementById('gridViewBtn');
+            const listBtn = document.getElementById('listViewBtn');
+            
+            grid.classList.remove('sm:grid-cols-2', 'lg:grid-cols-3');
+            grid.classList.add('grid-cols-1');
+            
+            listBtn.classList.add('bg-surface-dark', 'text-white', 'shadow-sm');
+            listBtn.classList.remove('text-text-secondary');
+            gridBtn.classList.remove('bg-surface-dark', 'text-white', 'shadow-sm');
+            gridBtn.classList.add('text-text-secondary');
+        }
+    </script>
+}

@@ -1,66 +1,91 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html class="dark" dir="rtl" lang="fa">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @if (ViewData["Title"] != null)
     {
-        <title>@ViewData["Title"] - فروشگاه لوازم دکوری</title>
+        <title>@ViewData["Title"] - فروشگاه آپشن خودرو</title>
     }
     else
     {
-        <title>فروشگاه لوازم دکوری</title>
+        <title>فروشگاه آپشن خودرو</title>
     }
 
     <meta name="keywords" content="@ViewData["keywords"]" />
     <meta name="description" content="@ViewData["metaDescription"]" />
 
-    <link href="~/Theme/assets/css/vendors.css" rel="stylesheet">
-    <link href="~/Theme/assets/css/style.css" rel="stylesheet">
-    <link href="~/Theme/assets/css/Custom.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101922",
+                        "surface-dark": "#182634",
+                        "border-dark": "#314d68",
+                        "text-secondary": "#90adcb",
+                    },
+                    fontFamily: {
+                        "display": ["Vazirmatn", "Inter", "sans-serif"],
+                        "body": ["Vazirmatn", "Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link href="~/Theme/CarOption/css/tailwind-custom.css" rel="stylesheet" />
 </head>
 
-<body>
+<body class="bg-background-light dark:bg-background-dark font-display text-white overflow-x-hidden min-h-screen flex flex-col">
 
     @await Component.InvokeAsync("Menu")
 
-    @RenderBody()
+    <main class="flex-grow">
+        @RenderBody()
+    </main>
 
     @await Component.InvokeAsync("Footer")
 
+    <!-- Scroll to Top Button -->
+    <button id="scroll-top-btn" 
+            onclick="scrollToTop()" 
+            class="fixed bottom-6 left-6 z-50 size-12 bg-primary hover:bg-blue-600 text-white rounded-full shadow-lg shadow-primary/25 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+        <span class="material-symbols-outlined">keyboard_arrow_up</span>
+    </button>
 
-    <div class="search-overlay" id="search-overlay">
-        <a href="javascript:void(0)" class="close-search-overlay" id="close-search-overlay">
-            <i class="ion-ios-close-empty"></i>
-        </a>
-        <div class="search-form">
-            <form method="get" asp-page="/Search">
-                <input type="search" name="value" id="value" placeholder="هرچه می خواهید در فروشگاه جستجو کنید ...">
-                <button type="submit">
-                    <i class="ion-android-search"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-
-
-    <div id="scroll-top">
-        <span>برو بالا</span><i class="ion-chevron-right"></i><i class="ion-chevron-right"></i>
-    </div>
-
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/Theme/assets/js/vendors.js"></script>
-    <script src="~/Theme/assets/js/active.js"></script>
-    <script src="~/Theme/assets/js/plugins.js"></script>
-    <script src="~/Theme/assets/js/custom.js"></script>
+    <script src="~/Theme/CarOption/js/site.js"></script>
 
     <script>
         $(document).ready(function () {
-            updateCart();
+            if (typeof updateCart === 'function') {
+                updateCart();
+            }
         });
     </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>

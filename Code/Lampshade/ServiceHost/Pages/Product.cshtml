@@ -6,328 +6,500 @@
     ViewData["metaDescription"] = Model.Product.MetaDescription;
 }
 
-<div class="breadcrumb-area section-space--half">
-    <div class="container wide">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb-wrapper breadcrumb-bg">
-                    <div class="breadcrumb-content">
-                        <h1 class="breadcrumb-content__title">@Model.Product.Name</h1>
-                        <ul class="breadcrumb-content__page-map">
-                            <li>
-                                <a asp-page="/Index">صفحه اصلی</a>
-                            </li>
-                            <li>
-                                <a asp-page="/ProductCategory" asp-route-id="@Model.Product.CategorySlug">@Model.Product.Category</a>
-                            </li>
-                            <li class="active">@Model.Product.Name</li>
-                        </ul>
+@* 
+    Product Detail Page - Car Accessories Frontend
+    Requirements: 5.1, 5.2, 5.3, 5.4, 5.5
+    - گالری تصاویر با thumbnail (5.1)
+    - اطلاعات محصول: نام، کد، قیمت، موجودی (5.2)
+    - امتیاز و تعداد دیدگاه
+    - دکمه افزودن به سبد (5.4)
+    - لیست خودروهای سازگار
+    - تب‌های توضیحات، مشخصات فنی، دیدگاه‌ها (5.3)
+    - محصولات مشابه (5.5)
+*@
+
+<!-- Breadcrumbs -->
+<div class="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex items-center gap-2 text-sm flex-wrap">
+        <a asp-page="/Index" class="text-text-secondary hover:text-primary transition-colors">خانه</a>
+        <span class="text-text-secondary material-symbols-outlined text-[16px]">chevron_left</span>
+        <a asp-page="/ProductCategory" asp-route-id="@Model.Product.CategorySlug" 
+           class="text-text-secondary hover:text-primary transition-colors">@Model.Product.Category</a>
+        <span class="text-text-secondary material-symbols-outlined text-[16px]">chevron_left</span>
+        <span class="text-white font-medium">@Model.Product.Name</span>
+    </div>
+</div>
+
+<!-- Main Product Section -->
+<main class="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <div class="bg-surface-dark rounded-2xl border border-border-dark overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+            
+            <!-- Product Gallery Section (5.1) -->
+            <div class="p-6 lg:p-8 border-b lg:border-b-0 lg:border-l border-border-dark">
+                <!-- Main Image -->
+                <div class="relative aspect-square bg-white/5 rounded-xl overflow-hidden mb-4" id="mainImageContainer">
+                    <img id="mainProductImage" 
+                         src="~/ProductPictures/@Model.Product.Picture" 
+                         alt="@Model.Product.PictureAlt" 
+                         title="@Model.Product.PictureTitle"
+                         class="w-full h-full object-contain p-4 transition-transform duration-300" />
+                    
+                    <!-- Discount Badge -->
+                    @if (Model.Product.HasDiscount)
+                    {
+                        <span class="absolute top-4 left-4 bg-red-600 text-white text-sm font-bold px-3 py-1.5 rounded-lg">
+                            @Model.Product.DiscountRate٪ تخفیف
+                        </span>
+                    }
+                    
+                    <!-- Zoom Button -->
+                    <button type="button" 
+                            class="absolute bottom-4 left-4 size-10 bg-surface-dark/80 backdrop-blur text-white rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
+                            title="بزرگنمایی">
+                        <span class="material-symbols-outlined">zoom_in</span>
+                    </button>
+                </div>
+                
+                <!-- Thumbnail Gallery -->
+                <div class="flex gap-3 overflow-x-auto pb-2" id="thumbnailGallery">
+                    <!-- Main Picture Thumbnail -->
+                    <button type="button" 
+                            onclick="changeMainImage('~/ProductPictures/@Model.Product.Picture', this)"
+                            class="thumbnail-btn shrink-0 w-20 h-20 rounded-lg border-2 border-primary bg-white/5 overflow-hidden p-1 transition-all hover:border-primary">
+                        <img src="~/ProductPictures/@Model.Product.Picture" 
+                             alt="@Model.Product.PictureAlt"
+                             class="w-full h-full object-cover rounded" />
+                    </button>
+                    
+                    <!-- Additional Pictures -->
+                    @foreach (var picture in Model.Product.Pictures)
+                    {
+                        <button type="button" 
+                                onclick="changeMainImage('~/ProductPictures/@picture.Picture', this)"
+                                class="thumbnail-btn shrink-0 w-20 h-20 rounded-lg border-2 border-border-dark bg-white/5 overflow-hidden p-1 transition-all hover:border-primary">
+                            <img src="~/ProductPictures/@picture.Picture" 
+                                 alt="@picture.PictureAlt"
+                                 title="@picture.PictureTitle"
+                                 class="w-full h-full object-cover rounded" />
+                        </button>
+                    }
+                </div>
+            </div>
+            
+            <!-- Product Info Section (5.2, 5.4) -->
+            <div class="p-6 lg:p-8 flex flex-col">
+                <!-- Category Badge -->
+                <a asp-page="/ProductCategory" asp-route-id="@Model.Product.CategorySlug"
+                   class="inline-flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-3 py-1 rounded-full w-fit mb-4 hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-outlined text-[14px]">category</span>
+                    @Model.Product.Category
+                </a>
+                
+                <!-- Product Name -->
+                <h1 class="text-2xl lg:text-3xl font-bold text-white mb-4 leading-tight">
+                    @Model.Product.Name
+                </h1>
+                
+                <!-- Rating & Reviews Count -->
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="flex items-center gap-1">
+                        <div class="flex text-yellow-500">
+                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[18px] text-gray-600">star</span>
+                        </div>
+                        <span class="text-text-secondary text-sm mr-1">۴.۰</span>
+                    </div>
+                    <span class="text-border-dark">|</span>
+                    <a href="#reviews" class="text-text-secondary text-sm hover:text-primary transition-colors">
+                        @Model.Product.Comments.Count دیدگاه
+                    </a>
+                </div>
+
+                <!-- Product Code & Stock Status -->
+                <div class="flex flex-wrap items-center gap-4 mb-6 text-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="text-text-secondary">کد محصول:</span>
+                        <span class="text-white font-medium bg-surface-dark px-2 py-0.5 rounded">@Model.Product.Code</span>
+                    </div>
+                    <span class="text-border-dark hidden sm:block">|</span>
+                    @if (Model.Product.IsInStock)
+                    {
+                        <div class="flex items-center gap-1 text-green-500">
+                            <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                            <span>موجود در انبار</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex items-center gap-1 text-red-500">
+                            <span class="material-symbols-outlined text-[18px]">cancel</span>
+                            <span>ناموجود</span>
+                        </div>
+                    }
+                </div>
+                
+                <!-- Price Section -->
+                <div class="bg-[#101a23] rounded-xl p-4 mb-6">
+                    @if (Model.Product.HasDiscount)
+                    {
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-text-secondary line-through text-lg">@Model.Product.Price</span>
+                            <span class="bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded">
+                                @Model.Product.DiscountRate٪
+                            </span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl font-bold text-white">@Model.Product.PriceWithDiscount</span>
+                            <span class="text-text-secondary">تومان</span>
+                        </div>
+                        <!-- Discount Countdown -->
+                        <div class="mt-3 flex items-center gap-2 text-sm text-yellow-500">
+                            <span class="material-symbols-outlined text-[18px]">timer</span>
+                            <span>پایان تخفیف:</span>
+                            <span class="font-medium" data-countdown="@Model.Product.DiscountExpireDate">@Model.Product.DiscountExpireDate</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl font-bold text-white">@Model.Product.Price</span>
+                            <span class="text-text-secondary">تومان</span>
+                        </div>
+                    }
+                </div>
+                
+                <!-- Short Description -->
+                @if (!string.IsNullOrEmpty(Model.Product.ShortDescription))
+                {
+                    <p class="text-text-secondary text-sm leading-relaxed mb-6">
+                        @Model.Product.ShortDescription
+                    </p>
+                }
+                
+                <!-- Compatible Cars Section -->
+                <div class="bg-[#101a23] rounded-xl p-4 mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-primary">directions_car</span>
+                        <span class="text-white font-medium">خودروهای سازگار</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs bg-surface-dark text-text-secondary px-3 py-1.5 rounded-lg border border-border-dark">پژو ۲۰۶</span>
+                        <span class="text-xs bg-surface-dark text-text-secondary px-3 py-1.5 rounded-lg border border-border-dark">پژو ۲۰۷</span>
+                        <span class="text-xs bg-surface-dark text-text-secondary px-3 py-1.5 rounded-lg border border-border-dark">دنا</span>
+                        <span class="text-xs bg-surface-dark text-text-secondary px-3 py-1.5 rounded-lg border border-border-dark">سمند</span>
+                        <span class="text-xs bg-surface-dark text-text-secondary px-3 py-1.5 rounded-lg border border-border-dark">رانا</span>
+                    </div>
+                </div>
+                
+                <!-- Add to Cart Section -->
+                <div class="mt-auto pt-6 border-t border-border-dark">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <!-- Quantity Selector -->
+                        <div class="flex items-center gap-3">
+                            <span class="text-text-secondary text-sm">تعداد:</span>
+                            <div class="flex items-center bg-[#101a23] rounded-lg border border-border-dark">
+                                <button type="button" 
+                                        onclick="decreaseQuantity()"
+                                        class="size-10 flex items-center justify-center text-text-secondary hover:text-white hover:bg-surface-dark transition-colors rounded-r-lg">
+                                    <span class="material-symbols-outlined">remove</span>
+                                </button>
+                                <input type="number" 
+                                       id="productCount" 
+                                       value="1" 
+                                       min="1" 
+                                       class="w-14 h-10 bg-transparent text-white text-center border-x border-border-dark focus:outline-none" />
+                                <button type="button" 
+                                        onclick="increaseQuantity()"
+                                        class="size-10 flex items-center justify-center text-text-secondary hover:text-white hover:bg-surface-dark transition-colors rounded-l-lg">
+                                    <span class="material-symbols-outlined">add</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Add to Cart Button -->
+                        @if (Model.Product.IsInStock)
+                        {
+                            <button type="button" 
+                                    onclick="addToCart('@Model.Product.Id', '@Model.Product.Name', '@Model.Product.DoublePrice', '@Model.Product.Picture')"
+                                    class="flex-1 h-12 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-primary/20">
+                                <span class="material-symbols-outlined">shopping_cart</span>
+                                افزودن به سبد خرید
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" 
+                                    disabled
+                                    class="flex-1 h-12 bg-gray-600 text-gray-400 font-bold rounded-xl flex items-center justify-center gap-2 cursor-not-allowed">
+                                <span class="material-symbols-outlined">remove_shopping_cart</span>
+                                محصول ناموجود است
+                            </button>
+                        }
+                    </div>
+                    
+                    <!-- Wishlist & Share Buttons -->
+                    <div class="flex items-center gap-4 mt-4">
+                        <button type="button" 
+                                class="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors text-sm">
+                            <span class="material-symbols-outlined text-[20px]">favorite_border</span>
+                            افزودن به علاقه‌مندی‌ها
+                        </button>
+                        <button type="button" 
+                                class="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors text-sm">
+                            <span class="material-symbols-outlined text-[20px]">share</span>
+                            اشتراک‌گذاری
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="page-content-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="page-wrapper">
-                    <div class="page-content-wrapper">
-                        <div class="single-product-main-content-area section-space" style="direction: ltr;">
-                            <div class="row" style="display: flex; flex-direction: row-reverse">
-                                <div class="col-lg-6">
-                                    <div class="product-details-slider-area">
-                                        <div class="big-image-wrapper">
-                                            <div class="product-details-big-image-slider-wrapper product-details-big-image-slider-wrapper--bottom-space ht-slick-slider"
-                                                 data-slick-setting='{
-                                                    "slidesToShow": 1,
-                                                    "slidesToScroll": 1,
-                                                    "arrows": false,
-                                                    "autoplay": false,
-                                                    "autoplaySpeed": 5000,
-                                                    "fade": true,
-                                                    "speed": 500,
-                                                    "prevArrow": {"buttonClass": "slick-prev", "iconClass": "fa fa-angle-left" },
-                                                    "nextArrow": {"buttonClass": "slick-next", "iconClass": "fa fa-angle-right" }
-                                                }' data-slick-responsive='[
-                                                    {"breakpoint":1501, "settings": {"slidesToShow": 1, "arrows": false} },
-                                                    {"breakpoint":1199, "settings": {"slidesToShow": 1, "arrows": false} },
-                                                    {"breakpoint":991, "settings": {"slidesToShow": 1, "arrows": false, "slidesToScroll": 1} },
-                                                    {"breakpoint":767, "settings": {"slidesToShow": 1, "arrows": false, "slidesToScroll": 1} },
-                                                    {"breakpoint":575, "settings": {"slidesToShow": 1, "arrows": false, "slidesToScroll": 1} },
-                                                    {"breakpoint":479, "settings": {"slidesToShow": 1, "arrows": false, "slidesToScroll": 1} }
-                                                ]'>
-
-                                                <div class="single-image">
-                                                    <img src="~/ProductPictures/@Model.Product.Picture" class="img-fluid"
-                                                         alt="@Model.Product.Picture">
-                                                </div>
-                                                @foreach (var picture in Model.Product.Pictures)
-                                                {
-                                                    <div class="single-image">
-                                                        <img src="~/ProductPictures/@picture.Picture" class="img-fluid"
-                                                             alt="@picture.PictureAlt" title="@picture.PictureTitle">
-                                                    </div>
-                                                }
-                                            </div>
-                                        </div>
-
-
-                                        <div class="product-details-small-image-slider-wrapper product-details-small-image-slider-wrapper--horizontal-space ht-slick-slider"
-                                             data-slick-setting='{
-                                                    "slidesToShow": 4,
-                                                    "slidesToScroll": 1,
-                                                    "arrows": true,
-                                                    "autoplay": false,
-                                                    "autoplaySpeed": 5000,
-                                                    "speed": 500,
-                                                    "asNavFor": ".product-details-big-image-slider-wrapper",
-                                                    "focusOnSelect": true,
-                                                    "centerMode": false,
-                                                    "prevArrow": {"buttonClass": "slick-prev", "iconClass": "fa fa-angle-left" },
-                                                    "nextArrow": {"buttonClass": "slick-next", "iconClass": "fa fa-angle-right" }
-                                                }' data-slick-responsive='[
-                                                    {"breakpoint":1501, "settings": {"slidesToShow": 3, "arrows": false} },
-                                                    {"breakpoint":1199, "settings": {"slidesToShow": 3, "arrows": false} },
-                                                    {"breakpoint":991, "settings": {"slidesToShow": 5, "arrows": false, "slidesToScroll": 1} },
-                                                    {"breakpoint":767, "settings": {"slidesToShow": 3, "arrows": false, "slidesToScroll": 1} },
-                                                    {"breakpoint":575, "settings": {"slidesToShow": 3, "arrows": false, "slidesToScroll": 1} },
-                                                    {"breakpoint":479, "settings": {"slidesToShow": 2, "arrows": false, "slidesToScroll": 1} }
-                                                ]'>
-                                            <div class="single-image">
-                                                <img src="~/ProductPictures/@Model.Product.Picture" class="img-fluid"
-                                                     alt="@Model.Product.Picture">
-                                            </div>
-                                            @foreach (var picture in Model.Product.Pictures)
-                                            {
-                                                <div class="single-image">
-                                                    <img src="~/ProductPictures/@picture.Picture" class="img-fluid"
-                                                         alt="@picture.PictureAlt" title="@picture.PictureTitle">
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="single-product-content-description">
-                                        <p class="single-info">
-                                            <a asp-page="/ProductCategory" asp-route-id="@Model.Product.CategorySlug">@Model.Product.Category</a>
-                                        </p>
-                                        <h2 class="product-title">@Model.Product.Name</h2>
-                                        <div class="product-rating">
-                                            <span class="rating">
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star active"></i>
-                                                <i class="ion-android-star-outline"></i>
-                                            </span>
-
-                                            <span class="review-count">
-                                                <a href="#">(2 reviews)</a> | <a href="#">نظر دهید</a>
-                                            </span>
-                                        </div>
-
-                                        <p class="single-grid-product__price" style="direction: rtl">
-                                            @if (Model.Product.HasDiscount)
-                                            {
-                                                <span class="main-price discounted">@Model.Product.Price تومان</span>
-                                                <span class="discounted-price">@Model.Product.PriceWithDiscount تومان</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="main-price">@Model.Product.Price تومان</span>
-                                            }
-
-                                        </p>
-
-                                        <p class="single-info">کد محصول: <span class="value">@Model.Product.Code</span> </p>
-                                        <p class="single-info">
-                                            @if (Model.Product.IsInStock)
-                                            {
-                                                <span class="text-success">موجود در انبار</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="text-danger">محصول ناموجود</span>
-                                            }
-                                        </p>
-
-                                        <p class="product-description">
-                                            @Model.Product.ShortDescription
-                                        </p>
-                                        @if (Model.Product.HasDiscount)
-                                        {
-                                            <div class="product-countdown" data-countdown="@Model.Product.DiscountExpireDate"></div>
-                                        }
-
-                                        <div class="product-actions">
-                                            <div class="quantity-selection">
-                                                <label>تعداد</label>
-                                                <input type="number" value="1" min="1" id="productCount">
-                                            </div>
-                                            <div class="product-buttons">
-                                                <a class="cart-btn" onclick="addToCart('@Model.Product.Id', '@Model.Product.Name', '@Model.Product.DoublePrice', '@Model.Product.Picture')">
-                                                    <i class="ion-bag"></i> افزودن به سبد خرید
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <div class="social-share-buttons mt-20">
-                                            <h5>این محصول را به اشتراک بگذارید</h5>
-                                            <ul>
-                                                <li>
-                                                    <a class="twitter" href="#">
-                                                        <i class="fa fa-twitter"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="facebook" href="#">
-                                                        <i class="fa fa-facebook"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="google-plus" href="#">
-                                                        <i class="fa fa-google-plus"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="pinterest" href="#">
-                                                        <i class="fa fa-pinterest"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <p class="single-info mb-0">
-                                            تگ ها: @Model.Product.Keywords
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-description-review-area">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="tab-slider-wrapper product-description-review-container  section-space--inner">
-                                        <nav>
-                                            <div class="nav nav-tabs justify-content-center" id="nav-tab"
-                                                 role="tablist">
-                                                <a class="nav-item nav-link active" id="description-tab"
-                                                   data-toggle="tab" href="#product-description" role="tab"
-                                                   aria-selected="true">توضیحات</a>
-                                                <a class="nav-item nav-link" id="review-tab" data-toggle="tab"
-                                                   href="#review" role="tab" aria-selected="false">نظرات (@Model.Product.Comments.Count)</a>
-                                            </div>
-                                        </nav>
-                                        <div class="tab-content" id="nav-tabContent">
-                                            <div class="tab-pane fade show active" id="product-description"
-                                                 role="tabpanel" aria-labelledby="description-tab">
-                                                <div class="product-description">
-                                                    @Model.Product.Description
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="review" role="tabpanel"
-                                                 aria-labelledby="review-tab">
-                                                <div class="product-rating-wrap">
-                                                    @*<div class="rating-list">
-                                                            <div class="sin-list float-right">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <span>(5)</span>
-                                                            </div>
-                                                            <div class="sin-list float-right">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <span>(3)</span>
-                                                            </div>
-                                                            <div class="sin-list float-right">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <span>(1)</span>
-                                                            </div>
-                                                            <div class="sin-list float-right">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <span>(0)</span>
-                                                            </div>
-                                                            <div class="sin-list float-right">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <span>(0)</span>
-                                                            </div>
-                                                        </div>*@
-                                                    @foreach (var comment in Model.Product.Comments)
-                                                    {
-                                                        <div class="ratings-wrapper">
-                                                            <div class="sin-ratings">
-                                                                <div class="rating-author">
-                                                                    <h3>@comment.Name</h3>
-                                                                    @*<div class="rating-star">
-                                                                            <i class="fa fa-star"></i>
-                                                                            <i class="fa fa-star"></i>
-                                                                            <i class="fa fa-star"></i>
-                                                                            <i class="fa fa-star"></i>
-                                                                            <i class="fa fa-star"></i>
-                                                                            <span>(5)</span>
-                                                                        </div>*@
-                                                                </div>
-                                                                <p>@comment.Message</p>
-                                                            </div>
-                                                        </div>
-                                                    }
-
-                                                    <div class="rating-form-wrapper fix">
-                                                        <h3>نظر خود را به ما بگویید</h3>
-                                                        <form method="post">
-                                                            <div class="rating-form row">
-                                                                <div class="col-md-6 col-12 form-group">
-                                                                    <label for="name">نام:</label>
-                                                                    <input id="name" placeholder="مثال: علی علوی" name="name" type="text">
-                                                                </div>
-                                                                <div class="col-md-6 col-12 form-group">
-                                                                    <label for="email">ایمیل:</label>
-                                                                    <input id="email" placeholder="مثال: contact@atriya.com" name="email" type="text">
-                                                                </div>
-                                                                <div class="col-12 form-group">
-                                                                    <label for="your-review">نظر شما:</label>
-                                                                    <textarea name="message" id="message" placeholder="نظر خود را بنویسید ..."></textarea>
-                                                                </div>
-                                                                <input type="hidden" name="ownerRecordId" value="@Model.Product.Id" />
-                                                                @*<input type="hidden" name="type" value="@CommnetManagement.Infrastructure.EFCore.CommentType.Product" />*@
-                                                                <input type="hidden" name="productSlug" value="@Model.Product.Slug" />
-                                                                <div class="col-12">
-                                                                    <input value="ارسال" type="submit">
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    
+    <!-- Product Tabs Section (5.3) -->
+    <div class="mt-8 bg-surface-dark rounded-2xl border border-border-dark overflow-hidden">
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-border-dark overflow-x-auto">
+            <button type="button" 
+                    onclick="switchTab('description')"
+                    id="tab-description"
+                    class="tab-btn px-6 py-4 text-sm font-medium text-white border-b-2 border-primary bg-primary/5 whitespace-nowrap transition-colors">
+                <span class="material-symbols-outlined text-[18px] align-middle ml-1">description</span>
+                توضیحات محصول
+            </button>
+            <button type="button" 
+                    onclick="switchTab('specs')"
+                    id="tab-specs"
+                    class="tab-btn px-6 py-4 text-sm font-medium text-text-secondary border-b-2 border-transparent hover:text-white whitespace-nowrap transition-colors">
+                <span class="material-symbols-outlined text-[18px] align-middle ml-1">list_alt</span>
+                مشخصات فنی
+            </button>
+            <button type="button" 
+                    onclick="switchTab('reviews')"
+                    id="tab-reviews"
+                    class="tab-btn px-6 py-4 text-sm font-medium text-text-secondary border-b-2 border-transparent hover:text-white whitespace-nowrap transition-colors">
+                <span class="material-symbols-outlined text-[18px] align-middle ml-1">rate_review</span>
+                دیدگاه کاربران (@Model.Product.Comments.Count)
+            </button>
+        </div>
+        
+        <!-- Tab Content -->
+        <div class="p-6 lg:p-8">
+            <!-- Description Tab -->
+            <div id="content-description" class="tab-content">
+                <div class="prose prose-invert max-w-none text-text-secondary leading-relaxed">
+                    @if (!string.IsNullOrEmpty(Model.Product.Description))
+                    {
+                        @Html.Raw(Model.Product.Description)
+                    }
+                    else
+                    {
+                        <p>توضیحاتی برای این محصول ثبت نشده است.</p>
+                    }
+                </div>
+            </div>
+            
+            <!-- Specs Tab -->
+            <div id="content-specs" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="flex items-center justify-between p-4 bg-[#101a23] rounded-lg">
+                        <span class="text-text-secondary">کد محصول</span>
+                        <span class="text-white font-medium">@Model.Product.Code</span>
                     </div>
+                    <div class="flex items-center justify-between p-4 bg-[#101a23] rounded-lg">
+                        <span class="text-text-secondary">دسته‌بندی</span>
+                        <span class="text-white font-medium">@Model.Product.Category</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-[#101a23] rounded-lg">
+                        <span class="text-text-secondary">وضعیت موجودی</span>
+                        @if (Model.Product.IsInStock)
+                        {
+                            <span class="text-green-500 font-medium">موجود</span>
+                        }
+                        else
+                        {
+                            <span class="text-red-500 font-medium">ناموجود</span>
+                        }
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-[#101a23] rounded-lg">
+                        <span class="text-text-secondary">برچسب‌ها</span>
+                        <span class="text-white font-medium text-sm">@Model.Product.Keywords</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reviews Tab -->
+            <div id="content-reviews" class="tab-content hidden">
+                <!-- Reviews List -->
+                @if (Model.Product.Comments.Any())
+                {
+                    <div class="space-y-4 mb-8">
+                        @foreach (var comment in Model.Product.Comments)
+                        {
+                            <div class="bg-[#101a23] rounded-xl p-4">
+                                <div class="flex items-start gap-4">
+                                    <div class="size-12 bg-primary/20 rounded-full flex items-center justify-center text-primary shrink-0">
+                                        <span class="material-symbols-outlined">person</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between gap-2 mb-2">
+                                            <h4 class="text-white font-medium">@comment.Name</h4>
+                                            <span class="text-text-secondary text-xs">@comment.CreationDate</span>
+                                        </div>
+                                        <div class="flex text-yellow-500 mb-2">
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="material-symbols-outlined text-[14px] text-gray-600">star</span>
+                                        </div>
+                                        <p class="text-text-secondary text-sm leading-relaxed">@comment.Message</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-8 mb-8">
+                        <span class="material-symbols-outlined text-[48px] text-text-secondary mb-2">chat_bubble_outline</span>
+                        <p class="text-text-secondary">هنوز دیدگاهی برای این محصول ثبت نشده است.</p>
+                    </div>
+                }
+                
+                <!-- Add Review Form -->
+                <div class="bg-[#101a23] rounded-xl p-6" id="reviews">
+                    <h3 class="text-white font-bold text-lg mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">edit_note</span>
+                        دیدگاه خود را بنویسید
+                    </h3>
+                    <form method="post" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="block text-text-secondary text-sm mb-2">نام شما</label>
+                                <input type="text" 
+                                       id="name" 
+                                       name="name" 
+                                       placeholder="مثال: علی علوی"
+                                       class="w-full h-12 bg-surface-dark border border-border-dark rounded-lg px-4 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all" />
+                            </div>
+                            <div>
+                                <label for="email" class="block text-text-secondary text-sm mb-2">ایمیل شما</label>
+                                <input type="email" 
+                                       id="email" 
+                                       name="email" 
+                                       placeholder="مثال: contact@example.com"
+                                       class="w-full h-12 bg-surface-dark border border-border-dark rounded-lg px-4 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all" />
+                            </div>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-text-secondary text-sm mb-2">متن دیدگاه</label>
+                            <textarea id="message" 
+                                      name="message" 
+                                      rows="4"
+                                      placeholder="نظر خود را درباره این محصول بنویسید..."
+                                      class="w-full bg-surface-dark border border-border-dark rounded-lg p-4 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none"></textarea>
+                        </div>
+                        <input type="hidden" name="ownerRecordId" value="@Model.Product.Id" />
+                        <input type="hidden" name="productSlug" value="@Model.Product.Slug" />
+                        <button type="submit" 
+                                class="h-12 px-8 bg-primary hover:bg-blue-600 text-white font-bold rounded-lg flex items-center justify-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined">send</span>
+                            ارسال دیدگاه
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    
+    <!-- Similar Products Section (5.5) -->
+    <div class="mt-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">auto_awesome</span>
+                محصولات مشابه
+            </h2>
+            <a asp-page="/ProductCategory" asp-route-id="@Model.Product.CategorySlug" 
+               class="text-primary hover:text-blue-400 text-sm font-medium flex items-center gap-1 transition-colors">
+                مشاهده همه
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+            </a>
+        </div>
+        
+        <!-- Similar Products Grid - This would ideally be populated from the backend -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="similarProducts">
+            <!-- Placeholder for similar products - In production, this would be populated dynamically -->
+            <div class="text-center py-12 col-span-full bg-surface-dark rounded-xl border border-border-dark">
+                <span class="material-symbols-outlined text-[48px] text-text-secondary mb-2">inventory_2</span>
+                <p class="text-text-secondary">محصولات مشابه به زودی نمایش داده می‌شوند.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- JavaScript for Product Page Interactions -->
+<script>
+    // Change main product image when clicking thumbnails
+    function changeMainImage(imageSrc, clickedBtn) {
+        const mainImage = document.getElementById('mainProductImage');
+        mainImage.src = imageSrc;
+        
+        // Update active thumbnail styling
+        document.querySelectorAll('.thumbnail-btn').forEach(btn => {
+            btn.classList.remove('border-primary');
+            btn.classList.add('border-border-dark');
+        });
+        clickedBtn.classList.remove('border-border-dark');
+        clickedBtn.classList.add('border-primary');
+    }
+    
+    // Quantity controls
+    function increaseQuantity() {
+        const input = document.getElementById('productCount');
+        input.value = parseInt(input.value) + 1;
+    }
+    
+    function decreaseQuantity() {
+        const input = document.getElementById('productCount');
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+    
+    // Tab switching functionality
+    function switchTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+        
+        // Remove active state from all tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('text-white', 'border-primary', 'bg-primary/5');
+            btn.classList.add('text-text-secondary', 'border-transparent');
+        });
+        
+        // Show selected tab content
+        document.getElementById('content-' + tabName).classList.remove('hidden');
+        
+        // Add active state to selected tab button
+        const activeBtn = document.getElementById('tab-' + tabName);
+        activeBtn.classList.remove('text-text-secondary', 'border-transparent');
+        activeBtn.classList.add('text-white', 'border-primary', 'bg-primary/5');
+    }
+    
+    // Handle URL hash for direct tab linking
+    document.addEventListener('DOMContentLoaded', function() {
+        const hash = window.location.hash;
+        if (hash === '#reviews') {
+            switchTab('reviews');
+        }
+    });
+</script>

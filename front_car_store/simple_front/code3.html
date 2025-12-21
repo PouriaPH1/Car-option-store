@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html class="dark" dir="rtl" lang="fa"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>صفحه جزئیات محصول آپشن خودرو</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101922",
+                        "surface-dark": "#1c2a38",
+                    },
+                    fontFamily: {
+                        "display": ["Vazirmatn", "Inter", "sans-serif"],
+                        "body": ["Vazirmatn", "Inter", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-x-hidden min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-[#223649] bg-[#101a23]/95 backdrop-blur">
+<div class="px-4 md:px-10 py-3 flex items-center justify-between gap-4 max-w-[1400px] mx-auto w-full">
+<div class="flex items-center gap-4 lg:gap-8">
+<a class="flex items-center gap-3 text-white hover:text-primary transition-colors" href="#">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-4xl">directions_car</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-tight hidden md:block">فروشگاه آپشن خودرو</h2>
+</a>
+</div>
+<!-- Search Bar (Desktop) -->
+<div class="hidden md:flex flex-1 max-w-md mx-4">
+<div class="flex w-full items-center rounded-lg bg-[#223649] overflow-hidden group focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+<input class="w-full bg-transparent border-none text-white placeholder:text-[#90adcb] px-4 py-2.5 focus:outline-none text-sm font-medium" placeholder="جستجو در محصولات..."/>
+<button class="px-4 text-[#90adcb] hover:text-white transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 lg:gap-8">
+<!-- Navigation Links -->
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-white text-sm font-medium hover:text-primary transition-colors" href="#">صفحه اصلی</a>
+<a class="text-white text-sm font-medium hover:text-primary transition-colors" href="#">محصولات</a>
+<a class="text-white text-sm font-medium hover:text-primary transition-colors" href="#">بلاگ</a>
+</nav>
+<!-- Actions -->
+<div class="flex gap-3">
+<button class="relative flex items-center justify-center size-10 rounded-lg bg-[#223649] text-white hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold">2</span>
+</button>
+<button class="flex items-center justify-center size-10 rounded-lg bg-[#223649] text-white hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-[1400px] mx-auto px-4 md:px-10 py-6">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap items-center gap-2 text-sm text-[#90adcb] mb-8">
+<a class="hover:text-primary transition-colors" href="#">خانه</a>
+<span class="material-symbols-outlined text-xs">chevron_left</span>
+<a class="hover:text-primary transition-colors" href="#">لوازم جانبی داخلی</a>
+<span class="material-symbols-outlined text-xs">chevron_left</span>
+<a class="hover:text-primary transition-colors" href="#">سیستم‌های صوتی و تصویری</a>
+<span class="material-symbols-outlined text-xs">chevron_left</span>
+<span class="text-white font-medium">مولتی‌مدیا اندروید ۱۱ اینچ</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+<!-- Right Column: Gallery -->
+<div class="lg:col-span-7 flex flex-col gap-4">
+<div class="relative w-full aspect-video rounded-xl overflow-hidden bg-surface-dark border border-[#223649]">
+<div class="w-full h-full bg-center bg-contain bg-no-repeat" data-alt="Car multimedia system display with colorful interface showing map and music" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBBw3sZW5c2mVZMA64UYO23MVXITwYZpN3y5CaPHt40Kwci1619q0LfYsoW8A2l7AzgIkLBYBltAkYV1btAuMX5G2zktAlMcca2C6iPC1HNaFbvJD4kKrQA-jkI12tBuLJkIv0jCDhiBs5JUz45PQXDsQiNXrtlPBQ5EktHfOxQijVfTcxGpHhDprF-tgCGjel2j1RsRiHgg2-WqnG4GglgS3AGEadPutYYgrygnpQK3lFQDRtdfXZukc-bZQNIfBoPwt49l2NBVM0');">
+</div>
+<div class="absolute top-4 left-4 flex flex-col gap-2">
+<span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg">فروش ویژه</span>
+</div>
+</div>
+<!-- Thumbnails -->
+<div class="grid grid-cols-4 gap-3">
+<button class="aspect-video rounded-lg overflow-hidden border-2 border-primary ring-2 ring-primary/20">
+<div class="w-full h-full bg-center bg-cover" data-alt="Closeup of car infotainment screen interface" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDcTsm-7dcMFNYNhQ24FvQQvzSexMUiYi1rnWLrixsSfOnRdE79dhEnNZL-cCsughsA8ARbfFDgTI-9pHej9oY8HXWw_-DmCyZ3sK6Fl-altkF88NhU6aFWCT6hfFuaKzL-PSeYboMfSeMdQwwg-Qujje3FEgkxe6W6DuqHFW-tjW69nU-pohwn_iyBt8_H79nie5asmrXwfiVKOHuyYev3PtmDY-PajEv7EauV68f2MGF8TNsXeTwpE6QTIfGWu7jXg23hYGlsqt4');">
+</div>
+</button>
+<button class="aspect-video rounded-lg overflow-hidden border border-[#223649] hover:border-[#90adcb] opacity-70 hover:opacity-100 transition-all">
+<div class="w-full h-full bg-center bg-cover" data-alt="Side view of car dashboard screen installation" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuvQjLcH-Ix0kGI1sNCFnyBz0fbcWsBnNVS9RfX58hNw1OWs1S8CCz7wf_pM8Fip1ylhOhst1JDhpjpOcSQ2dIKL4numqMmsdPC0UrSmvNQNTPyMGaOKse8w6ONLYlRq-S8K53Lbx_3ShJaYFHhmu1jiLxZCXnxU-poVsk9uAlUT95LwbFIcpJHhJV1wlUft1qyGC_8HDfh1kjfhhI20bj1kZFXo2g_p_qeJ8ZBUZR9KuN5GdUIKdmDyISdhzCLvV6Is7WK2lsoEY');">
+</div>
+</button>
+<button class="aspect-video rounded-lg overflow-hidden border border-[#223649] hover:border-[#90adcb] opacity-70 hover:opacity-100 transition-all">
+<div class="w-full h-full bg-center bg-cover" data-alt="Rear view of car multimedia connectors and ports" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCl8asMgT5BxYsF7dD0qdOMQkE4JI_bcsscJ7NlEUzJ4nE2tmKfN-d27TwGZ0L1F0yjV_mLnEMdF56DU3k_6k21fG04_FqybQ0ouc4sFFe3QvFvrnjXHl6VPMvwSYdNACGX2IqRYZWC6pv_5qVt20cMWPX7RpsdTL7WL1aPM4EymPhSL7K8D6Lv_UqjPVRkfU5XtbqfYUgM0x3ICRzWEE1YFu7GFpVtsrOCJlSrzA2Tw6mSzh2cqpoz-zEP40p5AFSGiQyLgU6KUcE');">
+</div>
+</button>
+<div class="aspect-video rounded-lg overflow-hidden bg-[#223649] flex items-center justify-center text-[#90adcb] cursor-pointer hover:bg-[#314d68] transition-colors">
+<span class="text-sm font-medium">+۲ تصویر</span>
+</div>
+</div>
+</div>
+<!-- Left Column: Product Info -->
+<div class="lg:col-span-5 flex flex-col">
+<h1 class="text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">مولتی‌مدیا اندروید ۱۱ اینچ پژو ۲۰۶ و ۲۰۷</h1>
+<div class="flex items-center gap-2 mb-6 text-sm text-[#90adcb]">
+<span>کد محصول: AND-206-V11</span>
+<span class="w-1 h-1 rounded-full bg-[#90adcb]"></span>
+<span class="text-green-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+                        موجود در انبار
+                    </span>
+</div>
+<!-- Rating -->
+<div class="flex items-center gap-2 mb-6">
+<div class="flex text-yellow-400">
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px]">star</span>
+</div>
+<span class="text-white font-bold">۴.۲</span>
+<span class="text-[#90adcb] text-sm">(۱۲۸ دیدگاه)</span>
+</div>
+<!-- Price Box -->
+<div class="bg-surface-dark border border-[#223649] rounded-xl p-6 mb-6">
+<div class="flex items-end justify-between mb-2">
+<span class="text-[#90adcb] text-sm mb-1">قیمت نهایی:</span>
+<div class="flex flex-col items-end">
+<span class="text-[#90adcb] line-through text-sm decoration-red-500">۵,۲۰۰,۰۰۰</span>
+<div class="flex items-center gap-2">
+<span class="text-3xl font-bold text-primary">۴,۵۰۰,۰۰۰</span>
+<span class="text-sm text-white">تومان</span>
+</div>
+</div>
+</div>
+<div class="h-px bg-[#223649] w-full my-4"></div>
+<!-- Actions -->
+<div class="flex flex-col gap-3">
+<button class="w-full h-12 bg-primary hover:bg-blue-600 text-white font-bold rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">shopping_cart_checkout</span>
+                            افزودن به سبد خرید
+                        </button>
+<button class="w-full h-12 bg-transparent border border-[#223649] hover:border-primary text-white hover:text-primary font-medium rounded-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined">chat</span>
+                            مشاوره قبل از خرید (واتساپ)
+                        </button>
+</div>
+</div>
+<!-- Compatibility -->
+<div class="mb-6">
+<h3 class="text-white font-bold text-sm mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">directions_car</span>
+                        مناسب برای خودروهای:
+                    </h3>
+<div class="flex flex-wrap gap-2">
+<div class="px-3 py-1.5 rounded-md bg-[#223649] text-gray-300 text-sm border border-transparent hover:border-[#90adcb] cursor-default transition-colors">
+                            پژو ۲۰۶ تیپ ۲
+                        </div>
+<div class="px-3 py-1.5 rounded-md bg-[#223649] text-gray-300 text-sm border border-transparent hover:border-[#90adcb] cursor-default transition-colors">
+                            پژو ۲۰۶ تیپ ۵
+                        </div>
+<div class="px-3 py-1.5 rounded-md bg-[#223649] text-gray-300 text-sm border border-transparent hover:border-[#90adcb] cursor-default transition-colors">
+                            پژو ۲۰۶ SD
+                        </div>
+<div class="px-3 py-1.5 rounded-md bg-[#223649] text-gray-300 text-sm border border-transparent hover:border-[#90adcb] cursor-default transition-colors">
+                            پژو ۲۰۷ دنده‌ای
+                        </div>
+</div>
+</div>
+<!-- Features/Trust -->
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-center gap-3 p-3 rounded-lg bg-[#101a23] border border-[#223649]">
+<span class="material-symbols-outlined text-primary text-2xl">verified_user</span>
+<div class="flex flex-col">
+<span class="text-white text-xs font-bold">گارانتی اصالت</span>
+<span class="text-[#90adcb] text-[10px]">۱۲ ماه گارانتی شرکتی</span>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 rounded-lg bg-[#101a23] border border-[#223649]">
+<span class="material-symbols-outlined text-primary text-2xl">local_shipping</span>
+<div class="flex flex-col">
+<span class="text-white text-xs font-bold">ارسال سریع</span>
+<span class="text-[#90adcb] text-[10px]">تحویل ۲۴ تا ۴۸ ساعته</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Details Tabs Section -->
+<div class="mt-16">
+<div class="border-b border-[#223649] mb-8 overflow-x-auto">
+<div class="flex gap-8 min-w-max">
+<button class="pb-4 text-primary border-b-2 border-primary font-bold text-base px-2">
+                        توضیحات محصول
+                    </button>
+<button class="pb-4 text-[#90adcb] hover:text-white font-medium text-base px-2 transition-colors">
+                        مشخصات فنی
+                    </button>
+<button class="pb-4 text-[#90adcb] hover:text-white font-medium text-base px-2 transition-colors">
+                        دیدگاه کاربران
+                    </button>
+<button class="pb-4 text-[#90adcb] hover:text-white font-medium text-base px-2 transition-colors">
+                        سوالات متداول
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Description Content -->
+<div class="lg:col-span-8">
+<div class="prose prose-invert max-w-none text-[#90adcb] leading-loose">
+<p class="mb-4">
+                            این مولتی‌مدیا پیشرفته با سیستم عامل اندروید ۱۱، تجربه‌ای مدرن و هوشمند را به کابین پژو ۲۰۶ شما می‌آورد. صفحه نمایش ۱۱ اینچی IPS با کیفیت تصویر HD و زاویه دید گسترده، امکان استفاده از نقشه، تماشای فیلم و مدیریت تماس‌ها را آسان می‌کند.
+                        </p>
+<p class="mb-4">
+                            پردازنده ۴ هسته‌ای قدرتمند به همراه ۲ گیگابایت حافظه رم، عملکردی روان و بدون لگ را تضمین می‌کند. این دستگاه به صورت کاملاً فابریک نصب شده و نیازی به سیم‌کشی اضافه یا تغییر در داشبورد خودرو ندارد. همچنین، پشتیبانی کامل از کنترل‌های روی فرمان (اینترفیس) از ویژگی‌های بارز این محصول است.
+                        </p>
+<h4 class="text-white font-bold text-lg mt-8 mb-4">ویژگی‌های برجسته:</h4>
+<ul class="list-none space-y-3 pr-0">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>قابلیت نصب تمامی اپلیکیشن‌های اندرویدی (Waze, Google Maps, Spotify)</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>دارای جی‌پی‌اس آفلاین و آنلاین دقیق</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>خروجی صدای قدرتمند DSP با تنظیمات حرفه‌ای اکولایزر</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>پشتیبانی از دوربین دنده عقب و جلو و DVR</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Technical Specs Summary Table -->
+<div class="lg:col-span-4">
+<div class="bg-surface-dark border border-[#223649] rounded-xl overflow-hidden">
+<div class="p-4 bg-[#223649] border-b border-[#101a23]">
+<h3 class="font-bold text-white">مشخصات کلیدی</h3>
+</div>
+<div class="divide-y divide-[#223649]">
+<div class="flex justify-between p-4 hover:bg-[#223649]/30 transition-colors">
+<span class="text-[#90adcb] text-sm">سیستم عامل</span>
+<span class="text-white text-sm font-medium" style="font-family: 'Inter', sans-serif;">Android 11</span>
+</div>
+<div class="flex justify-between p-4 hover:bg-[#223649]/30 transition-colors">
+<span class="text-[#90adcb] text-sm">حافظه داخلی</span>
+<span class="text-white text-sm font-medium" style="font-family: 'Inter', sans-serif;">32 GB</span>
+</div>
+<div class="flex justify-between p-4 hover:bg-[#223649]/30 transition-colors">
+<span class="text-[#90adcb] text-sm">حافظه رم</span>
+<span class="text-white text-sm font-medium" style="font-family: 'Inter', sans-serif;">2 GB DDR3</span>
+</div>
+<div class="flex justify-between p-4 hover:bg-[#223649]/30 transition-colors">
+<span class="text-[#90adcb] text-sm">صفحه نمایش</span>
+<span class="text-white text-sm font-medium" style="font-family: 'Inter', sans-serif;">11" IPS HD</span>
+</div>
+<div class="flex justify-between p-4 hover:bg-[#223649]/30 transition-colors">
+<span class="text-[#90adcb] text-sm">رزولوشن</span>
+<span class="text-white text-sm font-medium" style="font-family: 'Inter', sans-serif;">1024 x 600</span>
+</div>
+<div class="flex justify-between p-4 hover:bg-[#223649]/30 transition-colors">
+<span class="text-[#90adcb] text-sm">گارانتی</span>
+<span class="text-white text-sm font-medium">۱۲ ماه شرکتی</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Similar Products Carousel (Simplified) -->
+<div class="mt-16 mb-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold text-white">محصولات مشابه</h3>
+<a class="text-primary text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                    مشاهده همه
+                    <span class="material-symbols-outlined text-sm rotate-180">arrow_right_alt</span>
+</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<a class="group flex flex-col bg-surface-dark border border-[#223649] rounded-xl overflow-hidden hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5" href="#">
+<div class="aspect-[4/3] bg-[#101a23] w-full overflow-hidden relative">
+<div class="absolute inset-0 bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Keyless starter kit for cars" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxF1Xn3niIHPJxL_HBYvuTU2YwfvxlSORlwhwDAsOU1xG-ftCqa-KktvGh3J-0trbiKZhhPpN4VKN0HU5m_kmuLVblufOsrMlHdG-EGgpJo2xxfeWzjv1hseHC5PWNivjDkTD62-kx8wFqbv-V8INT19YwWGThh3FIFSa0TJ7faRCTx4EU_BX4rJ9brTA9rRDG0Z1WORM-6l0QGy3qRMnshNVGFUais3ED4FXdCd0wbOpPCCkdezWyMMoMGbeL64SFpA8-pKPTU9Y');">
+</div>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-1">
+<h4 class="text-white font-medium line-clamp-2 h-12">کیلس استارتر پژو ۲۰۶ و ۲۰۷ برند اسکای‌لاین</h4>
+<div class="flex items-center justify-between mt-auto pt-2">
+<span class="text-primary font-bold">۳,۲۰۰,۰۰۰ <span class="text-xs text-[#90adcb]">تومان</span></span>
+<div class="size-8 rounded-full bg-[#223649] flex items-center justify-center text-white group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</div>
+</div>
+</div>
+</a>
+<!-- Card 2 -->
+<a class="group flex flex-col bg-surface-dark border border-[#223649] rounded-xl overflow-hidden hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5" href="#">
+<div class="aspect-[4/3] bg-[#101a23] w-full overflow-hidden relative">
+<div class="absolute inset-0 bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Close up of car headlight lens" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDj0NhKHN2Ml8d9oFlNwGakPVJE_AYSj42YwaPjKc1h-9stlHigbK8VU-ZKqm37HC6edPHUJ5TDS-5jSn8gXS7m_6VhRojDlMb-28UglqbowcF_up7jnsYlC5Ja147vX3nL-ZZOF1jOuZaIo5nf8W7s-S7yI-tYfvdcqk78mDKgd4YiwH9M5TkmTrn-oXUAniQe8uNSa3J39KtI4bOQu0LKxla6frKOx8-qlnm0Fch-PO9SpbP3yG_0rILsugMMzBpS9hcJsySZ6O8');">
+</div>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-1">
+<h4 class="text-white font-medium line-clamp-2 h-12">چراغ جلو اسپرت طرح نئون ۲۰۶</h4>
+<div class="flex items-center justify-between mt-auto pt-2">
+<span class="text-primary font-bold">۱,۸۵۰,۰۰۰ <span class="text-xs text-[#90adcb]">تومان</span></span>
+<div class="size-8 rounded-full bg-[#223649] flex items-center justify-center text-white group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</div>
+</div>
+</div>
+</a>
+<!-- Card 3 -->
+<a class="group flex flex-col bg-surface-dark border border-[#223649] rounded-xl overflow-hidden hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5" href="#">
+<div class="aspect-[4/3] bg-[#101a23] w-full overflow-hidden relative">
+<div class="absolute inset-0 bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Car rear view camera device" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9KxhzNmjaTDiUfFXGXQeOjQ-5uMDVv39-p5OdkuVn96qqHTKVJFwCNM0PLatk1SQXIt_9EWXs-8BbyRr_K0tsdk2l25wWF7fYtv76IUOKU7AK00Qg7wQ7ygf25hp5SezhKN_-p4o6Um6xNwGgxxXvX7hZhRKeHt54uGPzByjOzkdCDIelLfeNe8qsVwFFitpdkYn79D1_Vr6qEiMTIppCgBv_L9og6Wtxl7iNPM9nCYMFibV7wGCHpBhP6RBXc85hXUnASU45pSE');">
+</div>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-1">
+<h4 class="text-white font-medium line-clamp-2 h-12">دوربین دنده عقب دید در شب ۳۶۰ درجه</h4>
+<div class="flex items-center justify-between mt-auto pt-2">
+<span class="text-primary font-bold">۴۵۰,۰۰۰ <span class="text-xs text-[#90adcb]">تومان</span></span>
+<div class="size-8 rounded-full bg-[#223649] flex items-center justify-center text-white group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</div>
+</div>
+</div>
+</a>
+<!-- Card 4 -->
+<a class="group flex flex-col bg-surface-dark border border-[#223649] rounded-xl overflow-hidden hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/5" href="#">
+<div class="aspect-[4/3] bg-[#101a23] w-full overflow-hidden relative">
+<div class="absolute inset-0 bg-center bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Car audio speakers pair" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDm7rwg8l1_UvSnLbr8Gk5a-mdRdRReZYkeFrMB15G355Razda-CGqKLNKndD4u_sj9wsgYO-Aqbi-1DmpxfdcPq6L8kxt_4YCfU_sd_2Ll7QwxDpFUKmn6bu76PwU8c3unUlphqIS_SIKGKVn_syX_vuFVoZ05rZmNv-y2XxrLVmNN8e9kt0ZFIm3G8IBN9wiNA1VdNKuN6YMb-z6yRuRGcTxZ1hUXljJGPRvD0Rnv30VBIwc1r-5V1kxGQ6vq9flR2hSQRCm3srI');">
+</div>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-1">
+<h4 class="text-white font-medium line-clamp-2 h-12">باند پایونیر ۶۹۷۵ اصلی</h4>
+<div class="flex items-center justify-between mt-auto pt-2">
+<span class="text-primary font-bold">۳,۹۰۰,۰۰۰ <span class="text-xs text-[#90adcb]">تومان</span></span>
+<div class="size-8 rounded-full bg-[#223649] flex items-center justify-center text-white group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</div>
+</div>
+</div>
+</a>
+</div>
+</div>
+</main>
+<!-- Footer Simple -->
+<footer class="border-t border-[#223649] bg-[#101a23] py-8 mt-auto">
+<div class="max-w-[1400px] mx-auto px-4 md:px-10 text-center md:text-right">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-[#90adcb] text-sm">© ۱۴۰۳ فروشگاه آپشن خودرو. تمامی حقوق محفوظ است.</p>
+<div class="flex gap-4">
+<a class="text-[#90adcb] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">alternate_email</span>
+</a>
+<a class="text-[#90adcb] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">call</span>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

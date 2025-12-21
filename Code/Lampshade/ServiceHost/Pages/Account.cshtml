@@ -4,109 +4,401 @@
     ViewData["Title"] = "ورود و ثبت نام";
 }
 
-<div class="breadcrumb-area section-space--half">
-    <div class="container wide">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="breadcrumb-wrapper breadcrumb-bg">
-                    <div class="breadcrumb-content">
-                        <h2 class="breadcrumb-content__title">ورود و ثبت نام</h2>
-                        <ul class="breadcrumb-content__page-map">
-                            <li><a asp-page="/Index">صفحه اصلی</a></li>
-                            <li class="active">ورود - ثبت نام</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Breadcrumbs -->
+<div class="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex items-center gap-2 text-sm">
+        <a asp-page="/Index" class="text-text-secondary hover:text-primary transition-colors">خانه</a>
+        <span class="text-text-secondary material-symbols-outlined text-[16px]">chevron_left</span>
+        <span class="text-white font-medium">ورود / ثبت‌نام</span>
     </div>
 </div>
 
-<div class="page-content-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="page-wrapper">
-                    <div class="page-content-wrapper">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6">
-                                @if (Model.LoginMessage != null)
-                                {
-                                    <div class="alert alert-danger">@Model.LoginMessage</div>
-                                }
-                                <form method="post" asp-page-handler="Login">
-                                    <div class="login-form">
-                                        <h4 class="login-title">ورود</h4>
-                                        <div class="row">
-                                            <div class="col-md-12 col-12">
-                                                <label>نام کاربری</label>
-                                                <input type="text" name="username" placeholder="نام کاربری">
-                                            </div>
-                                            <div class="col-12">
-                                                <label>کلمه رمز</label>
-                                                <input type="password" name="password" placeholder="کلمه رمز">
-                                            </div>
+<!-- Main Content -->
+<main class="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="flex justify-center">
+        <div class="w-full max-w-md">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="size-20 bg-primary/20 rounded-full flex items-center justify-center text-primary mx-auto mb-6">
+                    <span class="material-symbols-outlined text-[40px]">person</span>
+                </div>
+                <h1 class="text-3xl font-bold text-white mb-3">خوش آمدید</h1>
+                <p class="text-text-secondary">برای خرید و پیگیری سفارشات وارد حساب کاربری خود شوید</p>
+            </div>
 
-                                            @*<div class="col-sm-6">
-                                                    <div class="check-box d-inline-block ml-0 ml-md-2">
-                                                        <input type="checkbox" id="remember_me">
-                                                        <label for="remember_me">Remember me</label>
-                                                    </div>
-                                                </div>*@
+            <!-- Tab Navigation -->
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex bg-surface-dark rounded-xl p-1.5 border border-border-dark w-full">
+                    <button type="button" 
+                            onclick="switchAuthTab('login')"
+                            id="tab-login"
+                            class="auth-tab-btn flex-1 px-6 py-3 rounded-lg text-sm font-bold transition-all bg-primary text-white shadow-lg shadow-primary/25">
+                        <span class="material-symbols-outlined text-[18px] align-middle ml-1">login</span>
+                        ورود
+                    </button>
+                    <button type="button" 
+                            onclick="switchAuthTab('register')"
+                            id="tab-register"
+                            class="auth-tab-btn flex-1 px-6 py-3 rounded-lg text-sm font-bold transition-all text-text-secondary hover:text-white">
+                        <span class="material-symbols-outlined text-[18px] align-middle ml-1">person_add</span>
+                        ثبت‌نام
+                    </button>
+                </div>
+            </div>
 
-                                            <div class="col-sm-6 text-left text-sm-right">
-                                                <a href="#" class="forget-pass-link">رمز را فراموش کرده اید؟</a>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                <button class="register-button">ورود</button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                </form>
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <div class="bg-surface-dark rounded-2xl border border-border-dark overflow-hidden">
+                    <div class="p-6 border-b border-border-dark text-center">
+                        <h2 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-primary">login</span>
+                            ورود به حساب کاربری
+                        </h2>
+                        <p class="text-text-secondary text-sm mt-1">اطلاعات حساب خود را وارد کنید</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        @if (Model.LoginMessage != null)
+                        {
+                            <div class="mb-6 p-4 bg-red-600/10 border border-red-500/30 rounded-xl flex items-start gap-3">
+                                <span class="material-symbols-outlined text-red-500 shrink-0">error</span>
+                                <p class="text-red-400 text-sm">@Model.LoginMessage</p>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
-                                @if (Model.RegisterMessage != null)
-                                {
-                                    <div class="alert alert-danger">@Model.RegisterMessage</div>
-                                }
-                                <form method="post" asp-page-handler="Register">
-                                    <div class="login-form">
-                                        <h4 class="login-title">ثبت نام</h4>
-                                        <div class="row">
-                                            <div class="col-md-6 col-12 mb-20">
-                                                <label>نام کامل</label>
-                                                <input type="text" name="fullname" placeholder="نام کامل">
-                                            </div>
-                                            <div class="col-md-6 col-12 mb-20">
-                                                <label>نام کاربری</label>
-                                                <input type="text" name="username" placeholder="نام کاربری">
-                                            </div>
-                                            <div class="col-md-12 mb-20">
-                                                <label>موبایل</label>
-                                                <input type="number" name="mobile" placeholder="موبایل">
-                                            </div>
-                                            <div class="col-md-6 mb-20">
-                                                <label>کلمه رمز</label>
-                                                <input type="password" name="password" placeholder="کلمه رمز">
-                                            </div>
-                                            <div class="col-md-6 mb-20">
-                                                <label>تایید کلمه رمز</label>
-                                                <input type="password" name="rePassword" placeholder="تایید کلمه رمز">
-                                            </div>
-                                            <div class="col-12">
-                                                <button class="register-button mt-0">ثبت نام</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                        }
+                        
+                        <form method="post" asp-page-handler="Login" class="space-y-5">
+                            <!-- Username -->
+                            <div>
+                                <label for="login-username" class="block text-white text-sm font-medium mb-2 text-center">
+                                    نام کاربری
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">
+                                        <span class="material-symbols-outlined text-[20px]">person</span>
+                                    </span>
+                                    <input type="text" 
+                                           id="login-username"
+                                           name="username" 
+                                           placeholder="نام کاربری خود را وارد کنید"
+                                           class="w-full h-12 bg-[#101a23] border border-border-dark rounded-xl pr-12 pl-4 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all text-center" />
+                                </div>
+                            </div>
+                            
+                            <!-- Password -->
+                            <div>
+                                <label for="login-password" class="block text-white text-sm font-medium mb-2 text-center">
+                                    رمز عبور
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">
+                                        <span class="material-symbols-outlined text-[20px]">lock</span>
+                                    </span>
+                                    <input type="password" 
+                                           id="login-password"
+                                           name="password" 
+                                           placeholder="رمز عبور خود را وارد کنید"
+                                           class="w-full h-12 bg-[#101a23] border border-border-dark rounded-xl pr-12 pl-12 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all text-center" />
+                                    <button type="button" 
+                                            onclick="togglePassword('login-password', this)"
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary hover:text-white transition-colors">
+                                        <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Remember & Forgot -->
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" 
+                                           name="remember"
+                                           class="w-4 h-4 rounded border-border-dark bg-[#101a23] text-primary focus:ring-primary focus:ring-offset-0" />
+                                    <span class="text-text-secondary text-sm">مرا به خاطر بسپار</span>
+                                </label>
+                                <a href="#" class="text-primary hover:text-blue-400 text-sm font-medium transition-colors">
+                                    فراموشی رمز عبور
+                                </a>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <button type="submit" 
+                                    class="w-full h-12 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-primary/25">
+                                <span class="material-symbols-outlined">login</span>
+                                ورود به حساب
+                            </button>
+                        </form>
+                        
+                        <!-- Divider -->
+                        <div class="relative my-6">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-border-dark"></div>
+                            </div>
+                            <div class="relative flex justify-center">
+                                <span class="bg-surface-dark px-4 text-text-secondary text-sm">یا</span>
                             </div>
                         </div>
+                        
+                        <!-- Social Login -->
+                        <button type="button" 
+                                class="w-full h-11 bg-[#101a23] hover:bg-[#182634] border border-border-dark rounded-xl flex items-center justify-center gap-3 text-white text-sm font-medium transition-colors">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            ورود با گوگل
+                        </button>
+                        
+                        <!-- Switch to Register -->
+                        <p class="text-center text-text-secondary text-sm mt-6">
+                            حساب کاربری ندارید؟
+                            <button type="button" onclick="switchAuthTab('register')" class="text-primary hover:text-blue-400 font-medium transition-colors">
+                                ثبت‌نام کنید
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="register-form" class="auth-form hidden">
+                <div class="bg-surface-dark rounded-2xl border border-border-dark overflow-hidden">
+                    <div class="p-6 border-b border-border-dark text-center">
+                        <h2 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-primary">person_add</span>
+                            ایجاد حساب کاربری
+                        </h2>
+                        <p class="text-text-secondary text-sm mt-1">اطلاعات خود را برای ثبت‌نام وارد کنید</p>
+                    </div>
+                    
+                    <div class="p-6">
+                        @if (Model.RegisterMessage != null)
+                        {
+                            <div class="mb-6 p-4 bg-red-600/10 border border-red-500/30 rounded-xl flex items-start gap-3">
+                                <span class="material-symbols-outlined text-red-500 shrink-0">error</span>
+                                <p class="text-red-400 text-sm">@Model.RegisterMessage</p>
+                            </div>
+                        }
+                        
+                        <form method="post" asp-page-handler="Register" class="space-y-5">
+                            <!-- Full Name -->
+                            <div>
+                                <label for="reg-fullname" class="block text-white text-sm font-medium mb-2 text-center">
+                                    نام و نام خانوادگی
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">
+                                        <span class="material-symbols-outlined text-[20px]">badge</span>
+                                    </span>
+                                    <input type="text" 
+                                           id="reg-fullname"
+                                           name="fullname" 
+                                           placeholder="نام کامل خود را وارد کنید"
+                                           class="w-full h-12 bg-[#101a23] border border-border-dark rounded-xl pr-12 pl-4 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all text-center" />
+                                </div>
+                            </div>
+                            
+                            <!-- Username -->
+                            <div>
+                                <label for="reg-username" class="block text-white text-sm font-medium mb-2 text-center">
+                                    نام کاربری
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">
+                                        <span class="material-symbols-outlined text-[20px]">person</span>
+                                    </span>
+                                    <input type="text" 
+                                           id="reg-username"
+                                           name="username" 
+                                           placeholder="یک نام کاربری انتخاب کنید"
+                                           class="w-full h-12 bg-[#101a23] border border-border-dark rounded-xl pr-12 pl-4 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all text-center" />
+                                </div>
+                            </div>
+                            
+                            <!-- Mobile -->
+                            <div>
+                                <label for="reg-mobile" class="block text-white text-sm font-medium mb-2 text-center">
+                                    شماره موبایل
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">
+                                        <span class="material-symbols-outlined text-[20px]">phone_android</span>
+                                    </span>
+                                    <input type="tel" 
+                                           id="reg-mobile"
+                                           name="mobile" 
+                                           placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                                           dir="ltr"
+                                           class="w-full h-12 bg-[#101a23] border border-border-dark rounded-xl pr-12 pl-4 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all text-center" />
+                                </div>
+                            </div>
+                            
+                            <!-- Password -->
+                            <div>
+                                <label for="reg-password" class="block text-white text-sm font-medium mb-2 text-center">
+                                    رمز عبور
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">
+                                        <span class="material-symbols-outlined text-[20px]">lock</span>
+                                    </span>
+                                    <input type="password" 
+                                           id="reg-password"
+                                           name="password" 
+                                           placeholder="حداقل ۶ کاراکتر"
+                                           class="w-full h-12 bg-[#101a23] border border-border-dark rounded-xl pr-12 pl-12 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all text-center" />
+                                    <button type="button" 
+                                            onclick="togglePassword('reg-password', this)"
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary hover:text-white transition-colors">
+                                        <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Confirm Password -->
+                            <div>
+                                <label for="reg-repassword" class="block text-white text-sm font-medium mb-2 text-center">
+                                    تکرار رمز عبور
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">
+                                        <span class="material-symbols-outlined text-[20px]">lock</span>
+                                    </span>
+                                    <input type="password" 
+                                           id="reg-repassword"
+                                           name="rePassword" 
+                                           placeholder="رمز عبور را مجدداً وارد کنید"
+                                           class="w-full h-12 bg-[#101a23] border border-border-dark rounded-xl pr-12 pl-12 text-white placeholder:text-text-secondary focus:ring-2 focus:ring-primary focus:border-primary transition-all text-center" />
+                                    <button type="button" 
+                                            onclick="togglePassword('reg-repassword', this)"
+                                            class="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary hover:text-white transition-colors">
+                                        <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Terms -->
+                            <label class="flex items-center justify-center gap-3 cursor-pointer">
+                                <input type="checkbox" 
+                                       name="terms"
+                                       required
+                                       class="w-4 h-4 rounded border-border-dark bg-[#101a23] text-primary focus:ring-primary focus:ring-offset-0" />
+                                <span class="text-text-secondary text-sm">
+                                    با <a href="#" class="text-primary hover:text-blue-400">قوانین و مقررات</a> سایت موافقم
+                                </span>
+                            </label>
+                            
+                            <!-- Submit Button -->
+                            <button type="submit" 
+                                    class="w-full h-12 bg-primary hover:bg-blue-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-primary/25">
+                                <span class="material-symbols-outlined">person_add</span>
+                                ثبت‌نام
+                            </button>
+                        </form>
+                        
+                        <!-- Switch to Login -->
+                        <p class="text-center text-text-secondary text-sm mt-6">
+                            قبلاً ثبت‌نام کرده‌اید؟
+                            <button type="button" onclick="switchAuthTab('login')" class="text-primary hover:text-blue-400 font-medium transition-colors">
+                                وارد شوید
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <div class="mt-10 grid grid-cols-1 gap-4">
+                <div class="flex items-center gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark">
+                    <div class="size-12 bg-primary/20 rounded-lg flex items-center justify-center text-primary shrink-0">
+                        <span class="material-symbols-outlined">security</span>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-medium mb-0.5">امنیت بالا</h4>
+                        <p class="text-text-secondary text-xs">اطلاعات شما کاملاً محفوظ است</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark">
+                    <div class="size-12 bg-primary/20 rounded-lg flex items-center justify-center text-primary shrink-0">
+                        <span class="material-symbols-outlined">local_shipping</span>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-medium mb-0.5">پیگیری سفارش</h4>
+                        <p class="text-text-secondary text-xs">مشاهده وضعیت سفارشات در پنل کاربری</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 bg-surface-dark rounded-xl border border-border-dark">
+                    <div class="size-12 bg-primary/20 rounded-lg flex items-center justify-center text-primary shrink-0">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-medium mb-0.5">لیست علاقه‌مندی</h4>
+                        <p class="text-text-secondary text-xs">ذخیره محصولات مورد علاقه برای خرید بعدی</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>
+
+@section Scripts {
+    <script>
+        // Switch between login and register tabs
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const loginTab = document.getElementById('tab-login');
+            const registerTab = document.getElementById('tab-register');
+            
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                
+                loginTab.classList.add('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/25');
+                loginTab.classList.remove('text-text-secondary');
+                registerTab.classList.remove('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/25');
+                registerTab.classList.add('text-text-secondary');
+            } else {
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                
+                registerTab.classList.add('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/25');
+                registerTab.classList.remove('text-text-secondary');
+                loginTab.classList.remove('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/25');
+                loginTab.classList.add('text-text-secondary');
+            }
+        }
+        
+        // Toggle password visibility
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('.material-symbols-outlined');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+        
+        // Password match validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const password = document.getElementById('reg-password');
+            const rePassword = document.getElementById('reg-repassword');
+            
+            if (rePassword) {
+                rePassword.addEventListener('blur', function() {
+                    if (this.value !== password.value && this.value !== '') {
+                        this.classList.add('border-red-500');
+                        this.classList.remove('border-border-dark');
+                    } else {
+                        this.classList.remove('border-red-500');
+                        this.classList.add('border-border-dark');
+                    }
+                });
+            }
+        });
+    </script>
+}

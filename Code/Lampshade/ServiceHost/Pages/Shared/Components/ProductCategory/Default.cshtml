@@ -1,34 +1,91 @@
 ﻿@model List<_01_LampshadeQuery.Contracts.ProductCategory.ProductCategoryQueryModel>
 
-<div class="category-area section-space">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="category-wrapper">
-                    <div class="row row-10">
-
-                        @foreach (var item in Model)
-                        {
-                            <div class="col-lg-4 col-sm-6 grid-item">
-                                <div class="single-category-item">
-                                    <div class="single-category-item__image">
-                                        <a asp-page="/ProductCategory" asp-route-id="@item.Slug">
-                                            <img src="~/ProductPictures/@item.Picture" class="img-fluid" alt="@item.PictureAlt" title="@item.PictureTitle" />
-                                        </a>
-                                    </div>
-                                    <div class="single-category-item__content">
-                                        <h3 class="title">@item.Name</h3>
-                                        <a asp-page="/ProductCategory" asp-route-id="@item.Slug">
-                                            <i class="ion-android-arrow-dropleft-circle"></i> خرید
-                                        </a>
-                                    </div>
-                                </div>
+<!-- Product Categories Section -->
+<section class="py-12 lg:py-16">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-10">
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">دسته‌بندی محصولات</h2>
+            <p class="text-text-secondary max-w-2xl mx-auto">
+                محصولات مورد نظر خود را از دسته‌بندی‌های زیر انتخاب کنید
+            </p>
+        </div>
+        
+        <!-- Categories Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var category in Model)
+            {
+                <a asp-page="/ProductCategory" asp-route-id="@category.Slug" 
+                   class="group relative bg-surface-dark rounded-xl border border-border-dark overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
+                    <!-- Category Image -->
+                    <div class="relative aspect-[16/10] overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/50 to-transparent z-10"></div>
+                        <img src="~/ProductPictures/@category.Picture" 
+                             alt="@category.PictureAlt" 
+                             title="@category.PictureTitle"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        
+                        <!-- Category Icon Overlay -->
+                        <div class="absolute top-4 right-4 z-20">
+                            <div class="size-12 bg-primary/20 backdrop-blur rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                @{
+                                    var iconName = "category";
+                                    var categoryNameLower = category.Name?.ToLower() ?? "";
+                                    if (categoryNameLower.Contains("مانیتور") || categoryNameLower.Contains("مولتی"))
+                                    {
+                                        iconName = "tv";
+                                    }
+                                    else if (categoryNameLower.Contains("دوربین"))
+                                    {
+                                        iconName = "videocam";
+                                    }
+                                    else if (categoryNameLower.Contains("فریم") || categoryNameLower.Contains("قاب"))
+                                    {
+                                        iconName = "dashboard_customize";
+                                    }
+                                }
+                                <span class="material-symbols-outlined text-[24px]">@iconName</span>
                             </div>
-                        }
-
+                        </div>
                     </div>
-                </div>
-            </div>
+                    
+                    <!-- Category Content -->
+                    <div class="relative z-20 p-5 -mt-12">
+                        <div class="bg-surface-dark rounded-lg p-4 border border-border-dark/50">
+                            <h3 class="text-lg font-bold text-white group-hover:text-primary transition-colors mb-2">
+                                @category.Name
+                            </h3>
+                            
+                            @if (!string.IsNullOrEmpty(category.Description))
+                            {
+                                <p class="text-text-secondary text-sm line-clamp-2 mb-3">
+                                    @category.Description
+                                </p>
+                            }
+                            
+                            <div class="flex items-center justify-between">
+                                @if (category.Products != null && category.Products.Any())
+                                {
+                                    <span class="text-xs text-text-secondary bg-[#223649] px-3 py-1 rounded-full">
+                                        @category.Products.Count محصول
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-xs text-text-secondary bg-[#223649] px-3 py-1 rounded-full">
+                                        مشاهده محصولات
+                                    </span>
+                                }
+                                
+                                <span class="flex items-center gap-1 text-primary text-sm font-medium group-hover:gap-2 transition-all">
+                                    خرید
+                                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
         </div>
     </div>
-</div>
+</section>

@@ -1,111 +1,82 @@
 ﻿@model List<_01_LampshadeQuery.Contracts.ProductCategory.ProductCategoryQueryModel>
 
-<div class="single-row-slider-tab-area section-space">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="section-title-wrapper text-center section-space--half">
-                    <h2 class="section-title">محصولات ما</h2>
-                    <p class="section-subtitle">
-                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
-                    </p>
-                </div>
-            </div>
+<!-- Products by Category Section -->
+<section class="py-12 lg:py-16 bg-surface-dark/50">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-10">
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">محصولات ما</h2>
+            <p class="text-text-secondary max-w-2xl mx-auto">
+                محصولات را بر اساس دسته‌بندی مشاهده کنید
+            </p>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="tab-slider-wrapper">
-                    <div class="tab-product-navigation">
-                        <div class="nav nav-tabs justify-content-center" id="nav-tab2" role="tablist">
-                            @foreach (var category in Model)
-                            {
-                                <a class="nav-item nav-link @(Model.First() == category ? "active" : "")" id="product-tab-@category.Id" data-toggle="tab"
-                                   href="#product-series-@category.Id" role="tab" aria-selected="true">@category.Name</a>
-                            }
-                        </div>
-                    </div>
-                    <div class="tab-content">
-                        @foreach (var category in Model)
+        
+        <!-- Category Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
+            @{ var firstCategory = Model.FirstOrDefault(); }
+            @foreach (var category in Model)
+            {
+                <button class="category-tab px-6 py-2.5 rounded-lg text-sm font-medium transition-all @(category == firstCategory ? "bg-primary text-white" : "bg-surface-dark text-text-secondary hover:text-white border border-border-dark")"
+                        data-category="@category.Id">
+                    @category.Name
+                </button>
+            }
+        </div>
+        
+        <!-- Products Container -->
+        @foreach (var category in Model)
+        {
+            <div class="category-products @(category == firstCategory ? "" : "hidden")" data-category="@category.Id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @if (category.Products != null)
+                    {
+                        @foreach (var product in category.Products.Take(8))
                         {
-                            <div class="tab-pane fade show @(Model.First() == category ? "active" : "")" id="product-series-@category.Id" role="tabpanel"
-                                 aria-labelledby="product-tab-1">
-                                <div class="single-row-slider-wrapper">
-                                    <div class="ht-slick-slider" data-slick-setting='{
-                                "slidesToShow": 4,
-                                "slidesToScroll": 1,
-                                "arrows": true,
-                                "autoplay": false,
-                                "autoplaySpeed": 5000,
-                                "speed": 1000,
-                                "infinite": true,
-                                "rtl": true,
-                                "prevArrow": {"buttonClass": "slick-prev", "iconClass": "ion-chevron-left" },
-                                "nextArrow": {"buttonClass": "slick-next", "iconClass": "ion-chevron-right" }
-                            }' data-slick-responsive='[
-                                {"breakpoint":1501, "settings": {"slidesToShow": 4} },
-                                {"breakpoint":1199, "settings": {"slidesToShow": 4, "arrows": false} },
-                                {"breakpoint":991, "settings": {"slidesToShow": 3, "arrows": false} },
-                                {"breakpoint":767, "settings": {"slidesToShow": 2, "arrows": false} },
-                                {"breakpoint":575, "settings": {"slidesToShow": 2, "arrows": false} },
-                                {"breakpoint":479, "settings": {"slidesToShow": 1, "arrows": false} }
-                            ]'>
-                                        @foreach (var product in category.Products)
-                                        {
-                                            <div class="col">
-                                                <div class="single-grid-product">
-                                                    <div class="single-grid-product__image">
-                                                        @if (product.HasDiscount)
-                                                        {
-                                                            <div class="single-grid-product__label">
-                                                                <span class="sale">-@product.DiscountRate%</span>
-                                                            </div>
-                                                        }
-                                                        <a asp-page="/Product" asp-route-id="@product.Slug">
-                                                            <img src="~/ProductPictures/@product.Picture" title="@product.PictureTitle" class="img-fluid"
-                                                                 alt="@product.PictureAlt">
-                                                        </a>
-                                                    </div>
-                                                    <div class="single-grid-product__content">
-                                                        <div class="single-grid-product__category-rating">
-                                                            <span class="category">
-                                                                <a asp-page="/ProductCategory" asp-route-id="@category.Slug">@product.Category</a>
-                                                            </span>
-                                                            <span class="rating">
-                                                                <i class="ion-android-star active"></i>
-                                                                <i class="ion-android-star active"></i>
-                                                                <i class="ion-android-star active"></i>
-                                                                <i class="ion-android-star active"></i>
-                                                                <i class="ion-android-star-outline"></i>
-                                                            </span>
-                                                        </div>
-
-                                                        <h3 class="single-grid-product__title">
-                                                            <a asp-page="/Product" asp-route-id="@product.Slug">
-                                                                @product.Name
-                                                            </a>
-                                                        </h3>
-                                                        <p class="single-grid-product__price">
-                                                            @if (product.HasDiscount)
-                                                            {
-                                                                <span class="discounted-price">@product.PriceWithDiscount تومان</span>
-                                                                <span class="main-price discounted">@product.Price تومان</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="main-price">@product.Price تومان</span>
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                            <partial name="_ProductCard" model="product" />
                         }
-                    </div>
+                    }
+                </div>
+                
+                <!-- View All in Category -->
+                <div class="text-center mt-8">
+                    <a asp-page="/ProductCategory" asp-route-id="@category.Slug" 
+                       class="inline-flex items-center gap-2 text-primary hover:text-white font-medium transition-colors">
+                        مشاهده همه محصولات @category.Name
+                        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    </a>
                 </div>
             </div>
-        </div>
+        }
     </div>
-</div>
+</section>
+
+<!-- Tab Switching Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.category-tab');
+        const productContainers = document.querySelectorAll('.category-products');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const categoryId = this.dataset.category;
+                
+                // Update tab styles
+                tabs.forEach(t => {
+                    t.classList.remove('bg-primary', 'text-white');
+                    t.classList.add('bg-surface-dark', 'text-text-secondary', 'border', 'border-border-dark');
+                });
+                this.classList.remove('bg-surface-dark', 'text-text-secondary', 'border', 'border-border-dark');
+                this.classList.add('bg-primary', 'text-white');
+                
+                // Show/hide product containers
+                productContainers.forEach(container => {
+                    if (container.dataset.category === categoryId) {
+                        container.classList.remove('hidden');
+                    } else {
+                        container.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    });
+</script>
